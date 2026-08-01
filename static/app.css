@@ -1,0 +1,1221 @@
+/* ——— Base: general layout & typography ——— */
+html {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  height: 100vh;
+  overflow: hidden;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif;
+}
+
+.content {
+  display: none;
+}
+
+.content.active {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+/* The wrapper containing the sidebar and main area must allow its child to stretch */
+.flex.flex-grow { 
+  min-height: 0;
+  overflow: hidden;
+}
+
+body > .flex.flex-grow > .flex-1.flex.flex-col {
+  min-height: 0;
+  overflow: hidden;
+}
+
+#topBar,
+footer {
+  flex-shrink: 0;
+}
+
+/* Main handles scrolling for the content area, not the body or the card */
+main {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* The active section occupies at least the full available height */
+main > .content {
+  min-height: 100%;
+}
+
+/* Short cards fill the screen; long cards can extend and main handles scrolling */
+.content.active > .card {
+  flex: 1 0 auto;
+  min-height: 100%;
+  overflow: visible;
+  margin-bottom: 0;
+}
+
+/* No artificial spacing is added by default */
+.content.active::after {
+  content: none;
+}
+
+/* Spacing is added only when the page content is taller than the visible area */
+.content.active.has-scroll-gap::after {
+  content: "";
+  display: block;
+  flex: 0 0 1.45rem;
+  width: 100%;
+}
+
+/* Mobile-only override: preserve v2.2 document scroll while desktop uses internal main scroll */
+:root.mobile-mode {
+  height: auto;
+  overflow-x: hidden;
+  overflow-y: visible;
+}
+
+:root.mobile-mode body {
+  height: auto;
+  min-height: 100vh;
+  overflow-x: hidden;
+  overflow-y: visible;
+}
+
+@media (orientation: portrait) {
+  :root.mobile-mode body {
+    min-height: 100svh;
+  }
+}
+
+:root.mobile-mode .content.active {
+  min-height: 0;
+}
+
+:root.mobile-mode .flex.flex-grow,
+:root.mobile-mode body > .flex.flex-grow > .flex-1.flex.flex-col {
+  min-height: 0;
+  overflow: visible;
+}
+
+:root.mobile-mode main {
+  min-height: 0;
+  overflow: visible;
+}
+
+:root.mobile-mode main > .content {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+:root.mobile-mode .content.active > .card {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0;
+}
+
+:root.mobile-mode .content.active.has-scroll-gap::after {
+  content: none;
+  display: none;
+}
+
+.section-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.3;
+  margin-bottom: 1.25rem;
+}
+
+.section-text {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+}
+
+footer {
+  background-color: #1f2937;
+  color: #fff;
+  padding: 5px 10px;
+  text-align: center;
+  margin-top: auto;
+  font-size: 12px;
+}
+
+/* ——— Top bar ——— */
+.horizontal-bar {
+  width: 100%;
+  background-color: #1f2937;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  padding-left: 16px;
+}
+
+.topbar-blur {
+  backdrop-filter: blur(4px);
+  background-color: rgba(31, 41, 55, 1);
+}
+
+.toggle-button {
+  background: #4b5563;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all .2s ease-in-out;
+  margin-left: 1px;
+}
+
+/* ——— Buttons ——— */
+.button-style {
+  background: #4b5563;
+  color: #fff;
+  padding: 6px 12px;
+  font-size: 14px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: fit-content;
+  transition: all .3s ease;
+}
+
+.button-style:hover {
+  background: #6b7280;
+  cursor: pointer;
+}
+
+.button-style:active {
+  background: #1f2937;
+}
+
+/* ——— Sidebar (desktop) ——— */
+.sidebar {
+  width: 250px;
+  padding: 16px;
+  background: #1f2937;
+  color: #fff;
+  overflow: hidden;
+  position: relative;
+  transition: width .25s ease, padding .25s ease;
+  will-change: width, padding;
+}
+
+#sidebar {
+  flex-shrink: 0;
+}
+
+.sidebar.collapsed {
+  width: 60px;
+  padding: 16px 5px;
+  overflow: hidden;
+  align-items: center;
+}
+
+.sidebar > .menu-item > span {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: 200px;
+  transition: opacity .22s ease, max-width .22s ease;
+}
+
+.sidebar.collapsed > .menu-item > span {
+  opacity: 0;
+  max-width: 0;
+}
+
+/* ——— Menu items ——— */
+.menu-item {
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  justify-content: flex-start;
+  background: #4b5563;
+  border-radius: 8px;
+  padding: 8px 16px;
+  color: #fff;
+  border: none;
+  transition: all .3s ease;
+}
+
+.menu-item:hover {
+  background: #6b7280;
+  cursor: pointer;
+}
+
+.menu-item.active {
+  background: inherit;
+  color: inherit;
+}
+
+.menu-item:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.menu-item > span {
+  line-height: 1.2;
+}
+
+/* ——— Submenu ——— */
+.menu-item.submenu-sm {
+  font-size: 13px;
+  padding: 6px 18px;
+  margin-left: auto;
+  margin-right: 0;
+  width: 100%;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  white-space: nowrap;
+  transition: all .3s ease;
+}
+
+.menu-item.submenu-sm:not(:last-child) {
+  margin-bottom: 10px;
+}
+
+.submenu-sm .short-label {
+  display: none;
+}
+
+.sidebar.collapsed .submenu-sm .long-label {
+  display: none;
+}
+
+.sidebar.collapsed .submenu-sm .short-label {
+  display: inline;
+}
+
+.submenu-container {
+  display: none;
+  overflow: hidden;
+  contain: layout paint;
+  height: 0;
+  will-change: height;
+  transition: height .3s ease;
+  width: 70%;
+  margin-left: auto;
+  margin-right: 0;
+  margin-bottom: 0;
+}
+
+.submenu-container.show {
+  display: block;
+}
+
+/* collapsed view for submenu buttons */
+.sidebar.collapsed .submenu-container {
+  display: none;
+}
+
+.sidebar.collapsed .submenu-container.show {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: auto !important;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  gap: 8px;
+}
+
+.sidebar.collapsed .submenu-container .submenu-sm {
+  font-size: 11px;
+  padding: 6px 0;
+  width: 48px;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+  display: block;
+}
+
+.sidebar.collapsed .submenu-container .submenu-sm:not(:last-child) {
+  margin-bottom: 8px;
+}
+
+/* ——— Results sections ——— */
+.result-section {
+  display: none;
+}
+
+/* ——— Plotly tweaks ——— */
+.modebar {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  padding: 2px 4px !important;
+  /* Move the button bar to the top-left for both 2D and 3D */
+  left: 8px !important;
+  right: auto !important;
+}
+
+#graph-radius .modebar,
+#graph-sasa .modebar {
+  left: calc(8px - 2mm) !important;
+}
+
+/* 2D only: reduce spacing between modebar buttons */
+#graph-radius .modebar-btn,
+#graph-sasa .modebar-btn {
+  margin: 0 5px !important;   /* was 5px/6px in the global rules */
+}
+
+#graph-radius .modebar-group,
+#graph-sasa .modebar-group {
+  margin-right: 5px !important; /* was 6px in the global rule */
+}
+
+.modebar-group {
+  gap: 0 !important;
+  margin-right: 6px !important;
+  display: flex !important;
+}
+
+.modebar-btn {
+  margin: 0 6px !important;
+}
+
+/* Remove mobile tap highlight / focus box for Plotly modebar buttons (2D) */
+.js-plotly-plot .modebar-btn { -webkit-tap-highlight-color: transparent; }
+.js-plotly-plot .modebar-btn:focus { outline: none !important; }
+
+.modebar-btn[data-title="Produced with Plotly"] {
+  display: none !important;
+}
+
+.plot-wrap {
+  width: 100%;
+  min-height: 280px;
+}
+
+.plot-wrap.pub {
+  max-width: 680px;
+  margin-left: 0;
+  margin-right: 0;
+  min-height: 400px;
+}
+
+/* ====== 3D modebar: exact Plotly match ====== */
+
+/* The cloned bar must use the same layout */
+.modebar-3d-clone {
+    display: flex !important;
+    align-items: center !important;
+    padding: 4px 6px !important;      /* slightly roomier */
+	position: relative !important;
+	z-index: 50 !important;
+}
+
+/* Button groups: exactly like Plotly */
+.modebar-3d-clone .modebar-group {
+    display: flex !important;
+    flex-direction: row !important;
+    margin-right: 6px !important;
+}
+
+/* This is the actual spacing between buttons */
+.modebar-3d-clone .modebar-btn {
+    margin: 0 5px !important;         /* this creates the actual spacing */
+    padding: 4px !important;          /* makes the buttons more spacious */
+    position: relative !important;
+	touch-action: manipulation;
+	-webkit-tap-highlight-color: transparent;
+}
+
+/* Remove the focus ring; the clone is outside .js-plotly-plot, so it needs a separate rule */
+.modebar-3d-clone .modebar-btn:focus,
+.modebar-3d-clone .modebar-btn:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* On touch devices, Safari keeps :hover after tap; neutralize it so OFF still looks OFF */
+@media (hover: none) and (pointer: coarse) {
+  .modebar-3d-clone .modebar-btn:not(.active):hover,
+  .modebar-3d-clone .modebar-btn:not(.active):active {
+    background: transparent !important;
+  }
+}
+
+
+/* Tooltip: slightly larger and lighter gray */
+.modebar-3d-clone .modebar-btn::after {
+    content: attr(data-title);
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: auto;
+    bottom: -30px;     /* tooltip below the button, as before */
+    background: rgba(110, 122, 140, 0.98);
+    color: white;
+    padding: 4px 8px;
+    font-size: 12px;
+    border-radius: 2px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .12s ease-out;
+    z-index: 9999;
+}
+
+/* The 3D button bar must stay above the 3Dmol viewer */
+#pdb-toolbar-gradius,
+#pdb-toolbar-sasa {
+  position: relative;
+  z-index: 50;  /* high enough for tooltips to appear above the canvas */
+  margin-bottom: 2px !important; /* instead of the 10px inline style */
+}
+
+/* Show tooltip */
+.modebar-3d-clone .modebar-btn:hover::after {
+    opacity: 1;
+}
+
+/* Tooltip is also visible when forced from JS on mobile */
+.modebar-3d-clone .modebar-btn.show-tooltip::after {
+    opacity: 1;
+}
+
+/* Ensure a relative positioning context for tooltips */
+#pdb-wrapper-gradius,
+#pdb-wrapper-sasa {
+    position: relative !important;
+	margin-top: 0 !important;      /* bate margin-top:0.5rem din style="" */
+}
+
+
+/* 3D viewer layout with options panel on the right */
+.pdb-3d-wrapper {
+  display: flex;
+  align-items: stretch;
+  gap: 0.75rem;
+}
+
+.pdb-3d-main {
+  flex: 1 1 auto;
+}
+
+/* Options panel: hidden on load; visible when the 'visible' class is applied */
+.pdb-3d-menu {
+  display: none;                 /* hidden by default */
+  width: 210px;
+  min-width: 180px;
+  height: 100%;
+  border-radius: 0.75rem;
+  border: 1px solid #e5e7eb;
+  background-color: #f9fafb;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.78rem;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.pdb-3d-menu.visible {
+  display: flex;                 /* visible after Generate */
+}
+
+.pdb-3d-menu-title {
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+  color: #374151;
+}
+
+.pdb-3d-menu-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.pdb-3d-option {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  cursor: pointer;
+}
+
+.pdb-3d-option input[type="radio"] {
+  accent-color: #1f2937;
+}
+
+/* mini-tab-uri in 3D Display options */
+.pdb-3d-tabs {
+  display: flex;
+  gap: 0.25rem;
+  margin-bottom: 0.4rem;
+}
+
+.pdb-3d-tab {
+  flex: 1 1 auto;
+  border-radius: 9999px;
+  border: 1px solid #d1d5db;
+  background: #f3f4f6;
+  padding: 0.15rem 0.5rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+  text-align: center;
+}
+
+.pdb-3d-tab.active {
+  background: #111827;
+  color: #ffffff;
+  border-color: #111827;
+}
+
+/* On mobile, the viewer and panel stack vertically */
+@media (max-width: 768px) {
+  .pdb-3d-wrapper {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .pdb-3d-menu {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+/* Mobile portrait: allow the wrapper to grow without affecting landscape */
+@media (max-width: 768px) and (orientation: portrait) {
+  #pdb-wrapper-gradius,
+  #pdb-wrapper-sasa {
+    height: auto !important;          /* override the inline height:250px */
+  }
+
+  #pdb-viewer-gradius,
+  #pdb-viewer-sasa {
+    height: 200px !important;         /* viewer remains as before */
+  }
+}
+
+/* ——— Auth area / topbar buttons (desktop baseline) ——— */
+#authArea {
+  flex-wrap: nowrap;
+}
+
+#authButtonsContainer:not(.hidden) {
+  display: flex;
+  gap: 6px;
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+}
+
+#authButtonsContainer.hidden {
+  display: none !important;
+}
+
+#loginButton,
+#signUpButton,
+#logoutButton {
+  padding: 6px 12px;
+  font-size: 14px;
+  border-radius: 8px;
+  white-space: nowrap;
+  min-width: 0;
+  max-width: 100%;
+  flex: 0 1 auto;
+  width: auto !important;
+}
+
+#authArea .button-style {
+  padding: 6px 12px;
+  font-size: 14px;
+  border-radius: 8px;
+  flex-shrink: 0;
+  width: auto !important;
+}
+
+#userInfo {
+  display: inline-flex !important;
+  max-width: 40vw;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 14px;
+  line-height: 1;
+  margin-right: 6px;
+}
+
+#authArea .button-style#logoutButton {
+  width: auto !important;
+  min-width: 0 !important;
+  flex: 0 0 auto !important;
+}
+
+
+/* ——— Touch devices (≤599px) ——— */
+@media (max-width: 599px) {
+  .sidebar {
+    position: fixed;
+    top: 48px;
+    left: 0;
+    height: calc(100vh - 48px);
+    height: calc(100dvh - 48px);
+    width: 80vw;
+    max-width: 320px;
+    transform: translate3d(-100%, 0, 0);
+    transition: transform .20s ease-out;
+    will-change: transform;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, .24);
+    z-index: 1000;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .sidebar.open {
+	transform: translate3d(0, 0, 0);
+  }
+
+  #submenu-container .menu-item {
+    width: 100%;
+  }
+
+  .mobile-overlay {
+    display: none;
+    position: fixed;
+    top: 48px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, .45);
+    z-index: 900;
+    opacity: 0;
+    transition: opacity .15s linear;
+  }
+
+  .mobile-overlay.show {
+    display: block;
+    opacity: 1;
+  }
+
+  main {
+    padding: 12px !important;
+  }
+
+  .menu-item {
+    font-size: 15px;
+    padding: 10px 14px;
+    line-height: 1.2;
+  }
+
+  .submenu-container {
+    width: 100% !important;
+    margin: 8px 0 0 0 !important;
+  }
+
+  .menu-item.submenu-sm {
+    width: 100% !important;
+    margin: 0 0 8px 0 !important;
+    padding: 10px 12px !important;
+    font-size: 14px !important;
+  }
+
+  .sidebar.collapsed {
+    width: 80vw;
+    padding: 16px;
+  }
+
+  #graph-radius,
+  #graph-sasa {
+    width: 100% !important;
+    max-width: 950px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  main .button-style {
+    width: 100% !important;
+  }
+
+  .horizontal-bar {
+    box-sizing: border-box;
+    height: auto;
+    min-height: 48px;
+    padding-left: 8px;
+    padding-right: 8px;
+    gap: 6px;
+  }
+
+  #menuToggle {
+    flex: 0 0 44px;
+  }
+
+  #authArea {
+    flex: 1 1 auto;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    flex-wrap: wrap;
+    overflow: visible;
+    max-width: 100%;
+  }
+
+  .card {
+    padding: 12px !important;
+  }
+
+  .section-title {
+    font-size: 1.05rem;
+    margin-bottom: 1rem !important;
+  }
+}
+
+/* ——— Extra narrow touch (≤420px) ——— */
+@media (max-width: 420px) and (hover: none) and (pointer: coarse) {
+  #authArea {
+    gap: 4px;
+  }
+
+  #loginButton,
+  #signUpButton,
+  #logoutButton {
+    flex: 1 1 48%;
+    max-width: 100%;
+    justify-content: center;
+  }
+}
+
+/* ——— Mobile landscape fixes (Safari) ——— */
+@media (max-width: 599px) and (orientation: landscape),
+       (max-width: 420px) and (max-height: 700px) and (hover: none) and (pointer: coarse) and (orientation: portrait) {
+  .sidebar {
+    height: calc(100lvh - 48px);
+  }
+
+  .submenu-container {
+    height: auto !important;
+    max-height: none !important;
+    transition: none !important;
+    overflow: visible !important;
+  }
+
+  .submenu-anim {
+    transition: opacity 220ms ease, transform 220ms ease;
+    will-change: opacity, transform;
+  }
+
+  .submenu-anim:not(.enter) {
+    opacity: 0;
+    transform: translateY(-6px);
+    pointer-events: none;
+  }
+
+  .submenu-anim.enter {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+}
+
+/* reduce motion preference */
+@media (max-width: 599px) and (orientation: landscape) and (prefers-reduced-motion: reduce) {
+  .submenu-anim {
+    transition: none !important;
+  }
+}
+
+/* ——— iOS WebKit micro-fix (very small portrait) ——— */
+@supports (-webkit-touch-callout: none) {
+  @media (max-width: 380px) and (orientation: portrait) {
+    :root.mobile-mode #sidebar {
+      height: calc(100svh - 48px) !important;
+      min-height: -webkit-fill-available !important;
+    }
+
+    :root.mobile-mode .submenu-container {
+      transition: none !important;
+      height: auto !important;
+      max-height: none !important;
+      overflow: visible !important;
+      contain: none !important;
+    }
+
+    :root.mobile-mode .submenu-anim {
+      transition: opacity .18s ease, transform .18s ease !important;
+      transform: translateY(-4px) !important;
+      opacity: 0 !important;
+    }
+
+    :root.mobile-mode .submenu-anim.enter {
+      transform: translateY(0) !important;
+      opacity: 1 !important;
+    }
+  }
+}
+
+/* ——— Forced mobile layout (device-classified) ——— */
+:root.mobile-mode #sidebar {
+  position: fixed !important;
+  top: 48px !important;
+  left: 0 !important;
+  height: calc(100dvh - 48px) !important;
+  height: calc(100svh - 48px) !important;
+  min-height: -webkit-fill-available !important;
+  width: 80vw !important;
+  max-width: 320px !important;
+  transform: translate3d(-100%, 0, 0) !important;
+  transition: transform .20s ease-out !important;
+  will-change: transform !important;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, .24) !important;
+  z-index: 1001 !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  padding-bottom: env(safe-area-inset-bottom, 0px) !important;
+}
+
+:root.mobile-mode #sidebar.open {
+  transform: translate3d(0, 0, 0) !important;
+}
+
+:root.mobile-mode #mobileOverlay {
+  display: none;
+  position: fixed;
+  top: 48px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, .45);
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity .15s linear;
+}
+
+:root.mobile-mode .mobile-overlay.show {
+  display: block;
+  opacity: 1;
+}
+
+:root.mobile-mode main .button-style {
+  width: 100% !important;
+}
+
+:root.mobile-mode #submenu-container {
+  width: 100% !important;
+  margin: 8px 0 0 0 !important;
+}
+
+:root.mobile-mode .menu-item.submenu-sm {
+  width: 100% !important;
+  margin: 0 0 8px 0 !important;
+  padding: 10px 12px !important;
+  font-size: 14px !important;
+}
+
+:root.mobile-mode .submenu-container {
+  position: relative !important;
+  overflow: visible !important;
+}
+
+:root.mobile-mode #graph-radius,
+:root.mobile-mode #graph-sasa {
+  width: 100% !important;
+  max-width: 950px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* Mobile landscape with very small height (<=480px): scale down uniformly */
+@media (hover: none) and (pointer: coarse) and (orientation: landscape) and (max-height: 480px) {
+  #loginButton,
+  #signUpButton,
+  #logoutButton {
+    padding: 6px 12px !important;
+    font-size: 14px !important;
+    border-radius: 8px !important;
+    line-height: 1.3 !important;
+  }
+
+  #userInfo {
+    font-size: 14px !important;
+    max-width: 36vw !important;
+  }
+}
+
+/* --- Polymer structure preview (desktop right, mobile below) --- */
+.polymer-input-grid{
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+  align-items: start;
+}
+
+@media (min-width: 992px){
+  .polymer-input-grid{
+    grid-template-columns: max-content 215px;
+    column-gap: 50px;
+    justify-content: start;
+  }
+}
+
+.polymer-structure-box{
+  display: none;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 6px;
+  background: #fff;
+  width: 215px;
+  box-sizing: border-box;
+}
+
+.polymer-structure-box img{
+  width: 100%;
+  height: 130px;
+  object-fit: contain;
+  display: block;
+}
+
+.polymer-structure-label{
+  margin-top: 2px;
+  font-size: 12px;
+  line-height: 1.2;
+  text-align: center;
+  color: #374151;
+  height: 30px;
+  overflow: hidden;
+}
+
+.polymer-structure-right{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0px;
+}
+
+/* Desktop: hide the mobile variant on desktop only */
+@media (min-width: 992px){
+  .polymer-structure-box-mobile,
+  .polymer-structure-label-mobile{
+    display: none !important;
+  }
+}
+
+/* Mobile: hide the right-side variant and use the variant between the input and button */
+@media (max-width: 991px){
+  .polymer-structure-box-desktop,
+  .polymer-structure-label-desktop{
+    display: none !important;
+  }
+
+  .polymer-structure-box-mobile{
+	width: 215px;
+    margin-top: 15px;     /* increase if more spacing is needed */
+    margin-bottom: 2px;   /* reduce the spacing before the button */
+  }
+  .polymer-structure-label-mobile{
+	width: 215px;
+    margin: 0;
+	text-align: center;
+  }
+  
+  /* reduce the spacing between the box and the button */
+  #generate-button-gradius,
+  #generate-button-sasa{
+    margin-top: -6px !important;  /* was too large because of mt-* */
+  }
+}
+
+/* ===== Polymer form: perfect vertical alignment on mobile + desktop ===== */
+/* desktop */
+@media (min-width: 992px) {
+  .polymer-input-grid > div > .flex.flex-row.items-center.gap-3.mb-2 > label {
+    display: inline-block !important;
+    width: 162px !important;
+    min-width: 162px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    white-space: nowrap !important;
+  }
+
+  .polymer-input-grid > div > .flex.flex-row.items-center.gap-3.mb-2 {
+    gap: 8px !important;
+  }
+}
+
+/* mobile */
+@media (max-width: 991px) {
+  .polymer-input-grid > div > .flex.flex-row.items-center.gap-3.mb-2 {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    flex-wrap: nowrap !important;
+  }
+
+  .polymer-input-grid > div > .flex.flex-row.items-center.gap-3.mb-2 > label {
+    display: inline-block !important;
+    width: 165px !important;
+    min-width: 165px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    white-space: nowrap !important;
+  }
+
+  .polymer-input-grid > div > .flex.flex-row.items-center.gap-3.mb-2 > select,
+  .polymer-input-grid > div > .flex.flex-row.items-center.gap-3.mb-2 > input {
+    margin: 0 !important;
+  }
+}
+/* ============================================================= */ 
+
+/* ===== Documentation page ===== */
+
+.doc-layout {
+  display: grid;
+  grid-template-columns: 230px minmax(0, 1fr);
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.doc-toc {
+  position: static;
+  align-self: start;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #f9fafb;
+  padding: 1rem;
+  max-height: none;
+  overflow: visible;
+}
+
+.doc-toc-title {
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  color: #111827;
+}
+
+.doc-toc a {
+  display: block;
+  color: #374151;
+  padding: 0.3rem 0;
+  text-decoration: none;
+}
+
+.doc-toc a:hover {
+  color: #111827;
+  text-decoration: underline;
+}
+
+.doc-main {
+  min-width: 0;
+}
+
+.doc-section {
+  scroll-margin-top: 90px;
+  margin-bottom: 2rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.doc-section h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 0.75rem;
+}
+
+.doc-section h4 {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #111827;
+  margin-top: 1rem;
+  margin-bottom: 0.4rem;
+}
+
+.doc-section p {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: #374151;
+  margin-bottom: 0.85rem;
+}
+
+.doc-highlight {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: #374151;
+}
+
+.doc-math {
+  text-align: left;
+  overflow-x: auto;
+  font-size: 0.875rem;
+}
+
+.doc-math mjx-container {
+  margin: 0 !important;
+  padding: 0.1rem 0;
+  font-size: 100% !important;
+}
+
+@media (max-width: 640px) {
+  .doc-math {
+    font-size: 0.92rem;
+  }
+}
+
+@media (max-width: 900px) {
+  .doc-layout {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .doc-toc {
+    position: relative;
+    top: auto;
+    max-height: none;
+  }
+}
+
+/* ===== Documentation citations and references ===== */
+
+.doc-citation {
+  color: #2563eb;
+  text-decoration: none;
+  white-space: nowrap;
+  margin-left: 0.1rem;
+}
+
+.doc-citation:hover {
+  text-decoration: underline;
+}
+
+.doc-reference-list {
+  margin: 0;
+  padding-left: 0;
+  list-style: none;
+}
+
+.doc-reference-list li {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: #374151;
+  margin-bottom: 0.9rem;
+  padding-left: 0.35rem;
+  scroll-margin-top: 90px;
+}
+
+.doc-reference-list li:target {
+  background: #f3f4f6;
+  border-radius: 6px;
+}

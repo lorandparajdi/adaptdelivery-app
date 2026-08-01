@@ -1,0 +1,27 @@
+AdaptDelivery Web App - Restricted Academic Review License
+
+Copyright (c) 2026 Webmaster: Lorand Gabriel Parajdi, Ph.D.
+
+This repository is made publicly available solely for academic peer review, research evaluation and reproducibility assessment related to the AdaptDelivery platform.
+
+No open-source license is granted.
+
+You may view and clone this repository only for non-commercial academic review, research evaluation, or reproducibility assessment.
+
+You may not, without prior written permission from the copyright holder:
+
+- use this software or its assets for commercial purposes;
+- redistribute modified or unmodified copies;
+- publish derivative versions;
+- host, deploy, or provide a public service based on this repository;
+- sublicense, sell, rent, or otherwise transfer rights to this software;
+- use the included models, datasets, or generators in proprietary software or commercial workflows;
+- remove copyright, attribution, or license notices.
+
+The public repository contains only selected demo assets. The full production model collection, dataset collection and generator library are not included.
+
+This software and the included demo assets are provided "as is", without warranty of any kind, including but not limited to warranties of correctness, fitness for a particular purpose, availability, security, reproducibility, or scientific validity.
+
+For permission requests, licensing inquiries, or collaborations, contact:
+
+contact@adaptdelivery.org

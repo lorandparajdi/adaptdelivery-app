@@ -1,0 +1,1669 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+        <meta charset="utf-8" />
+        <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+        <title>Research Platform</title>
+		<link rel="preconnect" href="https://www.google.com" crossorigin>
+		<link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+		<link rel="dns-prefetch" href="//www.google.com">
+		<link rel="dns-prefetch" href="//www.gstatic.com">
+        <link rel="stylesheet" href="{{ url_for('static', filename='tailwind.min.css') }}">
+        <link href="{{ url_for('static', filename='favicon.ico') }}" rel="icon" type="image/x-icon" />
+		<script src="https://cdn.plot.ly/plotly-2.24.1.min.js"></script>
+		<script src="https://3dmol.csb.pitt.edu/build/3Dmol-min.js"></script>
+		<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    
+	<!-- Link to the CSS file -->
+		<link rel="stylesheet" href="{{ url_for('static', filename='app.css') }}">
+	<!--  ------------------------  -->
+	
+	<script>
+		window.RECAPTCHA_BYPASS = {{ 'true' if recaptcha_bypass else 'false' }};
+		window.RECAPTCHA_SITE_KEY = {{ recaptcha_site_key | tojson }};
+	</script>
+	
+	<!-- Link to the JavaScript file -->
+		<script src="{{ url_for('static', filename='app.js') }}" defer></script>
+	<!--  ------------------------  -->
+	
+	<script src="https://www.google.com/recaptcha/api.js?onload=onloadRecaptcha&render=explicit" defer></script>	
+  </head>
+  
+    <body class="text-[14px] leading-[1.6] font-sans bg-gray-100 flex flex-col min-h-screen">
+	
+	<noscript>
+		<div class="bg-red-600 text-white text-center text-sm p-3 shadow-md w-full">
+			⚠️ JavaScript is disabled in your browser. This application requires JavaScript to function properly.
+		</div>
+	</noscript>
+
+        <div id="topBar" class="horizontal-bar justify-between pr-4 bg-gray-800 backdrop-blur">
+            <button id="menuToggle" class="toggle-button" onclick="toggleMenu()">☰</button>
+            <div class="flex items-center gap-2" id="authArea">
+				<div id="authButtonsContainer" class="flex gap-2">
+					<button class="button-style" id="loginButton" onclick="showLoginModal()">Login</button>
+					<button class="button-style" id="signUpButton" onclick="showSignUpModal()">Sign up</button>
+				</div>
+			</div>
+		</div>
+		
+		<!-- Mobile overlay for the drawer -->
+		<div id="mobileOverlay" class="mobile-overlay"></div>
+
+        <div class="flex flex-grow">
+            <nav class="sidebar bg-gray-800 text-white p-4 flex flex-col gap-4" id="sidebar">
+                <button class="menu-item" onclick="showContent('home', event)">🧊 <span>Adapt Delivery</span></button>
+                <button class="menu-item" onclick="showContent('about', event)">💡 <span>About the Platform</span></button>
+                <button class="menu-item" onclick="showContent('features', event)">🧩 <span>Key Features</span></button>
+                <button class="menu-item" onclick="showContent('how-it-works', event)">⚙️ <span>How It Works</span></button>
+				
+			    <button id="btn-polymer" class="menu-item opacity-50 cursor-not-allowed" disabled onclick="toggleSubmenu(event)">
+					📊 <span>Properties Generator</span>
+				</button>
+				<!-- Submenu buttons grouped in a collapsible container -->
+			<div id="submenu-container" class="submenu-container">
+				<button class="menu-item submenu-sm opacity-50 cursor-not-allowed" id="btn-gradius" disabled onclick="showContent('gradius', event)">
+					<span class="long-label">Radius of Gyration</span>
+					<span class="short-label">Rg</span>
+				</button>
+				<button class="menu-item submenu-sm opacity-50 cursor-not-allowed" id="btn-sasa" disabled onclick="showContent('sasa', event)">
+					<span class="long-label">SASA</span>
+					<span class="short-label">SASA</span>
+				</button>
+				<!--
+				<button class="menu-item submenu-sm opacity-50 cursor-not-allowed" id="btn-diffusion" disabled onclick="showContent('diffusion', event)">
+					<span class="long-label">Diffusion Coefficient</span>
+					<span class="short-label">Dc</span>
+				</button>
+				-->
+		    </div>
+                <button class="menu-item" onclick="showContent('application', event)">🧬 <span>Nanoplatform Design</span></button>
+				<button class="menu-item" onclick="showContent('objectives', event)">🎯 <span>Research & Innovation</span></button>
+				<button class="menu-item" onclick="showContent('learn-more', event)">📘 <span>Learn More</span></button>
+				<button class="menu-item" onclick="showContent('contact', event)">📩 <span>Contact</span></button>
+            </nav>
+            <div class="flex-1 flex flex-col">
+                <main class="flex-1 p-6">
+                    <div class="content active" id="home">
+                        <div class="card bg-white p-6 shadow-md flex flex-col justify-between">
+						<!-- Top section -->
+						<div>
+                            <h2 class="section-title" style="margin-bottom: 1.25rem;">🧊 Welcome to the Polymer Property Prediction Platform</h2>
+							
+							<div class="section-text" style="line-height: 1.55; max-width: 1200px;">
+                              <p style="margin-bottom: 0.9rem;">
+								Discover our cutting-edge informatics platform that utilizes advanced machine learning algorithms to predict crucial polymer properties such as radius of gyration and surface accessible area. <br>
+								Designed to support nanoplatform development, this tool helps researchers accelerate the design of smart drug and gene delivery systems through precise computational insights. <br>
+								This AI web platform is part of the project: <a href="https://www.itim-cj.ro/PNCDI/adapt4dlvry/" target="_blank" class="text-blue-600 hover:underline">
+								“Adaptive Design and Assembly of Polymer-Based Nanoplatforms for Smart Gene and Drug Delivery”</a>.
+							  </p>
+							</div>
+							  
+						</div>
+						<!-- Bottom section -->
+						<!-- Project Partners -->
+						<div class="mt-10 text-gray-800 leading-relaxed">
+						  <h3 class="text-lg font-bold mb-2">Project Partners:</h3>
+						  <hr class="border-gray-400 mb-4">
+						  
+						  <!-- INCDTIM -->
+						  <div class="flex items-center mb-2 text-base">
+							<img src="{{ url_for('static', filename='Sigla ITIM.png') }}"
+								 alt="INCDTIM" class="h-10 w-10 object-contain mr-3">
+							<a href="https://www.itim-cj.ro/" 
+							   target="_blank" 
+							   class="hover:underline text-blue-700 text-sm">
+							   National Institute for Research and Development of Isotopic and Molecular Technologies – INCDTIM
+							</a>
+						  </div>
+
+						  <!-- FMI UBB -->
+						  <div class="flex items-center mb-2 text-base">
+						    <img src="{{ url_for('static', filename='logo_cs.png') }}" 
+								 alt="UBB" class="h-10 w-10 object-contain mr-3">
+							<a href="https://www.cs.ubbcluj.ro/" 
+							   target="_blank" 
+							   class="hover:underline text-blue-700 text-sm">
+							   Faculty of Mathematics and Computer Science, Babeș-Bolyai University – BBU
+							</a>
+						  </div>
+						</div>
+						</div>
+                    </div>
+                    <div class="content" id="about">
+                        <div class="card bg-white p-6 shadow-md">
+                            <h2 class="section-title" style="margin-bottom: 1.25rem;">💡 About the Platform</h2>
+							
+							<div class="section-text" style="line-height: 1.55; max-width: 1200px;">
+                              <p style="margin-bottom: 0;">
+							    Our platform empowers researchers and developers by providing rapid, reliable predictions of polymer characteristics. <br>
+								Leveraging pre-trained machine learning models built on extensive, curated datasets, users can efficiently evaluate potential materials, reducing the need for time-consuming experimental testing and streamlining the development pipeline.
+							  </p>
+							</div>  
+							  
+                        </div>
+                    </div>
+                    <div class="content" id="features">
+                        <div class="card bg-white p-6 shadow-md">
+                            <h2 class="section-title" style="margin-bottom: 1.25rem;">🧩 Key Features</h2>
+							
+							<div class="section-text" style="line-height: 1.55; max-width: 1200px;">
+                              <p style="margin-bottom: 0.9rem;">
+							    <strong>Property Prediction:</strong><br>
+								Instantly estimate vital polymer properties like radius of gyration and surface accessible area to inform nanoplatform design.
+							  </p>
+							  
+							  <p style="margin-bottom: 0.9rem;">
+							    <strong>Pre-Built Machine Learning Models:</strong><br>
+								Utilize models trained on diverse polymer datasets, ensuring high accuracy and broad applicability across different chemistries.
+							  </p>
+							  
+							  <p style="margin-bottom: 0.9rem;">
+								<strong>User-Friendly Interface:</strong><br> 
+								Easily input chemical structures or descriptors and receive immediate property predictions, enabling rapid screening and iterative design.
+							  </p>
+							  
+							  <p style="margin-bottom: 0;">
+								<strong>Customizable Parameters:</strong><br> 
+								Tailor prediction settings or input specific features to meet your unique research requirements and hypotheses.
+							  </p>
+							</div>  
+							  
+                        </div>
+                    </div>
+                    <div class="content" id="how-it-works">
+                        <div class="card bg-white p-6 shadow-md">
+                            <h2 class="section-title" style="margin-bottom: 1.25rem;">⚙️ How It Works</h2>
+							
+							<div class="section-text" style="line-height: 1.55; max-width: 1200px;">
+                              <p style="margin-bottom: 0.9rem;">
+								<strong>Input Data:</strong><br> 
+								Select from predefined molecular descriptors within the platform.
+							  </p>
+							  
+							  <p style="margin-bottom: 0.9rem;">
+								<strong>Model Processing:</strong><br> 
+								Our sophisticated machine learning algorithms analyze the input data to generate property predictions.
+							  </p>
+							
+							  <p style="margin-bottom: 0;">
+								<strong>Results & Insights:</strong><br> 
+								Review predicted values—including radius of gyration and surface accessible area—to guide your material selection and nanoplatform design decisions.
+							  </p>
+							</div>  
+							  
+                        </div>
+                    </div>
+					
+					<!-- Radius of Gyration page -->
+					<div class="content" id="gradius">
+						<div class="card bg-white p-6 shadow-md">
+							<h2 class="section-title" style="margin-bottom: 2rem;">📊 Properties Generator: Radius of Gyration</h2>
+							<div class="polymer-input-grid">
+							  <div>
+								
+							<!-- Select 1: Polymer Type (Natural / Synthetic) -->
+							<div class="flex flex-row items-center gap-3 mb-2">
+								<label class="section-text" for="polymer_category_gradius">
+									Select Polymer Class:
+								</label>
+								<select id="polymer_category_gradius"
+										class="border rounded px-2 py-1 text-sm w-32"
+										onchange="updatePolymerOptions('gradius')">
+									<option value="">Select...</option>
+									<option value="Natural">Natural</option>
+									<option value="Synthetic">Synthetic</option>
+								</select>
+							</div>
+
+							<!-- Select 2: Polymer Type (Acrylamides, Amines, ... / Lignin) -->
+							<div class="flex flex-row items-center gap-3 mb-2">
+								<label class="section-text" for="polymer_family_gradius">
+								  Select Polymer Type:
+								</label>
+								<select id="polymer_family_gradius"
+										class="border rounded px-2 py-1 text-sm w-32"
+										onchange="updatePolymerNameOptions('gradius')" disabled>
+								</select>
+							</div>
+
+							<!-- Select 3: Polymer Name (PE, PEO, etc.) - keep the existing ID to preserve backend compatibility -->
+							<div class="flex flex-row items-center gap-3 mb-2">
+								<label class="section-text" for="polymer_type_gradius">
+								  Select Polymer Name:
+								</label>
+								<select id="polymer_type_gradius"
+										class="border rounded px-2 py-1 text-sm w-32"
+										onchange="validateInputGradius(); updatePolymerStructure('gradius');" disabled>
+								</select>
+							</div>			
+							
+							<div class="flex flex-row items-center gap-3 mb-2">
+							<label class="section-text" for="lengths_gradius">Enter Monomer Number:</label>
+							<input id="lengths_gradius" type="text" placeholder="e.g., 72" class="border rounded px-2 py-1 text-sm w-32" oninput="this.value = this.value.replace(/\s/g, ''); validateInputGradius()" />
+							</div>
+							<p id="error-message-gradius" class="text-red-500 text-xs mb-4 hidden">*Please enter a single positive integer less than or equal to 1000 (no spaces or decimals).</p>
+							
+							<div id="polymerStructureBoxMobile_gradius" class="polymer-structure-box polymer-structure-box-mobile">
+							  <img id="polymerStructureImgMobile_gradius" src="" alt="Polymer repeat unit">
+							</div>
+							<div id="polymerStructureLabelMobile_gradius" class="polymer-structure-label polymer-structure-label-mobile"></div>
+							
+							<button type="button" id="generate-button-gradius" class="button-style w-full mt-4" disabled onclick="generateGradius()">Generate Graph</button>
+							  </div>
+							  <!-- RIGHT (desktop): keep box + label in ONE grid cell -->
+							  <div class="polymer-structure-right polymer-structure-box-desktop">
+								<div id="polymerStructureBox_gradius" class="polymer-structure-box">
+								  <img id="polymerStructureImg_gradius" src="" alt="Polymer repeat unit">
+								</div>
+								<div id="polymerStructureLabel_gradius" class="polymer-structure-label polymer-structure-label-desktop"></div>
+							  </div>
+							</div>
+							
+							<!-- 1) 3D section first -->
+							<div class="result-section" id="pdb-section-gradius" style="display:none; margin-top: 1.5rem; width:100%;">
+							  <h3 class="section-title" style="margin-bottom:18px;">
+								3D Polymer Configuration <span id="pdb-polymer-label-gradius"></span>
+							  </h3>
+								<!-- New: toolbar host placed outside the viewer -->
+								<div id="pdb-toolbar-gradius" style="display:flex; justify-content:flex-start; margin:6px 0 2px 0;"></div>
+							    
+							    <!-- 3D wrapper with options panel on the right -->
+								<div id="pdb-wrapper-gradius"
+									 class="pdb-3d-wrapper"
+									 style="width:100%; height:230px; margin-top:0.5rem; position:relative;">
+
+								  <!-- Main 3D viewer, same as before with one additional class -->
+								  <div id="pdb-viewer-gradius"
+									   class="pdb-3d-main"
+									   style="width:100%; height:100%; position:relative;"></div>
+
+								  <!-- 3D options panel on the right, initially hidden and shown from JavaScript -->
+								  <div class="pdb-3d-menu" data-kind="gradius">
+									<div class="pdb-3d-menu-title">3D Display options</div>
+
+									<!-- Mini tabs: Style / Display section -->
+									<div class="pdb-3d-tabs">
+									  <button type="button"
+											  class="pdb-3d-tab active"
+											  data-tab="style"
+											  onclick="switch3DMenuTab(this, 'style')">
+										Style
+									  </button>
+									  <button type="button"
+											  class="pdb-3d-tab"
+											  data-tab="display"
+											  onclick="switch3DMenuTab(this, 'display')">
+										Display section
+									  </button>
+									</div>
+
+									<!-- TAB: Style, visible by default -->
+									<div class="pdb-3d-tab-content" data-tab="style">
+									  <div class="pdb-3d-menu-group">
+										<label class="pdb-3d-option">
+										  <input type="radio" name="pdb-style-gradius"
+												 value="stick" checked
+												 onchange="changePdbStyle('gradius','stick')">
+										  Licorice (sticks)
+										</label>
+
+										<label class="pdb-3d-option">
+										  <input type="radio" name="pdb-style-gradius"
+												 value="line"
+												 onchange="changePdbStyle('gradius','line')">
+										  Lines
+										</label>
+
+										<label class="pdb-3d-option">
+										  <input type="radio" name="pdb-style-gradius"
+												 value="cpk"
+												 onchange="changePdbStyle('gradius','cpk')">
+										  CPK (spheres)
+										</label>
+
+										<label class="pdb-3d-option">
+										  <input type="radio" name="pdb-style-gradius"
+												 value="vdw"
+												 onchange="changePdbStyle('gradius','vdw')">
+										  VDW (big spheres)
+										</label>
+									  </div>
+									</div>
+
+									<!-- TAB: Gradius - Display section (all / noh) -->
+									<div class="pdb-3d-tab-content" data-tab="display" style="display:none;">
+									  <div class="pdb-3d-menu-group">
+										<div class="pdb-3d-menu-group">
+										  <div style="font-size:12px; font-weight:600; margin-bottom:2px;">Display mode</div>
+										  <label class="pdb-3d-option">
+											<input type="radio" name="pdb-display-gradius" value="all" checked
+												   onchange="changePdbDisplay('gradius')">
+											all (with hydrogens)
+										  </label>
+
+										  <label class="pdb-3d-option">
+											<input type="radio" name="pdb-display-gradius" value="noh"
+												   onchange="changePdbDisplay('gradius')">
+											noh (hide hydrogens)
+										  </label>
+										</div>
+										
+										<hr style="border:0; border-top:1px solid rgba(0,0,0,0.08); margin:10px 0;">
+										<div class="pdb-3d-menu-group">
+										  <div style="font-size:12px; font-weight:600; margin-top:-6px; margin-bottom:2px;">Projection</div>
+										  <label class="pdb-3d-option">
+											<input type="radio" name="pdb-projection-gradius"
+												   value="perspective" checked
+												   onchange="changePdbProjection('gradius','perspective')">
+											Perspective
+										  </label>
+
+										  <label class="pdb-3d-option">
+											<input type="radio" name="pdb-projection-gradius"
+												   value="orthographic"
+												   onchange="changePdbProjection('gradius','orthographic')">
+											Orthographic
+										  </label>
+										</div>
+									  </div>
+									</div>
+								  </div>
+								</div>
+							</div>
+							
+							<!-- 2) Computed Predictions after the 3D section -->
+							<div id="computed-header-gradius" class="section-text flex items-center w-full" style="display:none; margin: 10px 0 0.25rem 0; gap: 1rem;">
+								<strong>COMPUTED PREDICTIONS <span id="selected-polymer-label-gradius"></span></strong>
+							</div>
+							<div id="predictions-section-gradius" class="result-section" style="display:none;">
+								<div id="predictions-gradius" class="section-text" style="margin: 0 0 1.5rem 0;"></div>
+							</div>
+
+							<!-- 3) Graph section last -->
+							<div class="result-section" id="graph-section-gradius" style="display:none;">
+							  <button id="toggle-size-btn-gradius"
+									  class="button-style w-full mt-4 mb-4"
+									  onclick="toggleGraphSize('graph-radius','toggle-size-btn-gradius')">
+								  📐 Resize Graph for Publication
+							  </button>
+
+							  <h3 class="section-title">Graph: Length vs Radius of Gyration for <span id="graph-title-polymer-gradius"></span></h3>
+							  <div id="graph-radius" class="plot-wrap" style="margin-bottom: 1rem;"></div>
+
+							  <!-- Line 1: GRADIUS stats -->
+							  <div class="section-text flex items-center w-full"
+								   style="margin: 0 0 0.25rem 0; gap: 1rem;">
+							    <strong>GRADIUS stats:</strong>
+							  </div>
+
+							  <!-- Line 2 and below: GRADIUS stats values -->
+							  <div id="stats-gradius" class="section-text" style="margin: 0 0 1.5rem 0;"></div>
+							</div>
+					    </div>
+					</div>
+					
+					<!-- SASA page -->
+					<div class="content" id="sasa">
+						<div class="card bg-white p-6 shadow-md">
+							<h2 class="section-title" style="margin-bottom: 2rem;">📊 Properties Generator: SASA</h2>
+							<div class="polymer-input-grid">
+							  <div>
+							  
+							<!-- Select 1: Polymer Type (Natural / Synthetic) -->
+							<div class="flex flex-row items-center gap-3 mb-2">
+								<label class="section-text" for="polymer_category_sasa">
+									Select Polymer Class:
+								</label>
+								<select id="polymer_category_sasa"
+										class="border rounded px-2 py-1 text-sm w-32"
+										onchange="updatePolymerOptions('sasa')">
+								    <option value="">Select...</option>
+								    <option value="Natural">Natural</option>
+									<option value="Synthetic">Synthetic</option>
+								</select>
+							</div>
+
+							<!-- Select 2: Polymer Type (Acrylamides, Amines, ... / Lignin) -->
+							<div class="flex flex-row items-center gap-3 mb-2">
+								<label class="section-text" for="polymer_family_sasa">
+								  Select Polymer Type:
+								</label>
+								<select id="polymer_family_sasa"
+										class="border rounded px-2 py-1 text-sm w-32"
+										onchange="updatePolymerNameOptions('sasa')" disabled>
+								</select>
+							</div>
+
+							<!-- Select 3: Polymer Name (PE, PEO, etc.) - keep the existing ID to preserve backend compatibility -->
+							<div class="flex flex-row items-center gap-3 mb-2">
+								<label class="section-text" for="polymer_type_sasa">
+								  Select Polymer Name:
+								</label>
+								<select id="polymer_type_sasa"
+										class="border rounded px-2 py-1 text-sm w-32"
+										onchange="validateInputSasa(); updatePolymerStructure('sasa');" disabled>
+								</select>
+							</div>				
+					
+							<div class="flex flex-row items-center gap-3 mb-2">
+							<label class="section-text" for="lengths_sasa">Enter Monomer Number:</label>
+							<input id="lengths_sasa" type="text" placeholder="e.g., 72" class="border rounded px-2 py-1 text-sm w-32" oninput="this.value = this.value.replace(/\s/g, ''); validateInputSasa()" />
+							</div>
+							<p id="error-message-sasa" class="text-red-500 text-xs mb-4 hidden">*Please enter a single positive integer less than or equal to 1000 (no spaces or decimals).</p>
+							
+							<div id="polymerStructureBoxMobile_sasa" class="polymer-structure-box polymer-structure-box-mobile">
+							  <img id="polymerStructureImgMobile_sasa" src="" alt="Polymer repeat unit">
+							</div>
+							<div id="polymerStructureLabelMobile_sasa" class="polymer-structure-label polymer-structure-label-mobile"></div>
+							
+							<button type="button" id="generate-button-sasa" class="button-style w-full mt-4" disabled onclick="generateSasa()">Generate Graph</button>
+							  </div>
+							  <!-- RIGHT: structure preview (appears only when polymer selected) -->
+							  <div class="polymer-structure-right polymer-structure-box-desktop">
+							    <div id="polymerStructureBox_sasa" class="polymer-structure-box">
+								  <img id="polymerStructureImg_sasa" src="" alt="Polymer repeat unit">
+								</div>
+								<div id="polymerStructureLabel_sasa" class="polymer-structure-label polymer-structure-label-desktop"></div>
+							  </div>
+							</div>
+							
+							<!-- 1) 3D section first -->
+							<div class="result-section" id="pdb-section-sasa" style="display:none; margin-top: 1.5rem; width:100%;">
+							  <h3 class="section-title" style="margin-bottom:18px;">
+								3D Polymer Configuration <span id="pdb-polymer-label-sasa"></span>
+							  </h3>
+							    <!-- New: toolbar host placed outside the viewer -->
+								<div id="pdb-toolbar-sasa" style="display:flex; justify-content:flex-start; margin:6px 0 2px 0;"></div>
+							  
+							    <!-- 3D wrapper with options panel on the right -->
+							    <div id="pdb-wrapper-sasa"
+									 class="pdb-3d-wrapper"
+									 style="width:100%; height:230px; margin-top:0.5rem; position:relative;">
+
+								  <!-- Main 3D viewer -->
+								  <div id="pdb-viewer-sasa"
+									   class="pdb-3d-main"
+									   style="width:100%; height:100%; position:relative;"></div>
+
+								  <!-- 3D options panel on the right -->
+								  <div class="pdb-3d-menu" data-kind="sasa">
+									<div class="pdb-3d-menu-title">3D Display options</div>
+
+									<div class="pdb-3d-tabs">
+									  <button type="button"
+											  class="pdb-3d-tab active"
+											  data-tab="style"
+											  onclick="switch3DMenuTab(this, 'style')">
+										Style
+									  </button>
+									  <button type="button"
+											  class="pdb-3d-tab"
+											  data-tab="display"
+											  onclick="switch3DMenuTab(this, 'display')">
+										Display section
+									  </button>
+									</div>
+
+									<div class="pdb-3d-tab-content" data-tab="style">
+									  <div class="pdb-3d-menu-group">
+										<label class="pdb-3d-option">
+										  <input type="radio" name="pdb-style-sasa"
+												 value="stick" checked
+												 onchange="changePdbStyle('sasa','stick')">
+											Licorice (sticks)
+										</label>
+
+										<label class="pdb-3d-option">
+										  <input type="radio" name="pdb-style-sasa"
+									  		     value="line"
+										   	     onchange="changePdbStyle('sasa','line')">
+										  Lines
+										</label>
+
+										<label class="pdb-3d-option">
+										  <input type="radio" name="pdb-style-sasa"
+												 value="cpk"
+												 onchange="changePdbStyle('sasa','cpk')">
+										  CPK (spheres)
+										</label>
+
+										<label class="pdb-3d-option">
+										  <input type="radio" name="pdb-style-sasa"
+												 value="vdw"
+												 onchange="changePdbStyle('sasa','vdw')">
+										  VDW (big spheres)
+										</label>
+									  </div>
+									</div>
+									
+									<!-- TAB: SASA - Display section (all / noh) -->
+									<div class="pdb-3d-tab-content" data-tab="display" style="display:none;">
+									  <div class="pdb-3d-menu-group">
+										<div class="pdb-3d-menu-group">
+										  <div style="font-size:12px; font-weight:600; margin-bottom:2px;">Display mode</div>
+										  <label class="pdb-3d-option">
+											<input type="radio" name="pdb-display-sasa" value="all" checked
+												   onchange="changePdbDisplay('sasa')">
+											all (with hydrogens)
+										  </label>
+
+										  <label class="pdb-3d-option">
+											<input type="radio" name="pdb-display-sasa" value="noh"
+												   onchange="changePdbDisplay('sasa')">
+											noh (hide hydrogens)
+										  </label>
+										</div>
+										
+										<hr style="border:0; border-top:1px solid rgba(0,0,0,0.08); margin:10px 0;">
+										<div class="pdb-3d-menu-group">
+										  <div style="font-size:12px; font-weight:600; margin-top:-6px; margin-bottom:2px;">Projection</div>
+										  <label class="pdb-3d-option">
+											<input type="radio" name="pdb-projection-sasa"
+												   value="perspective" checked
+												   onchange="changePdbProjection('sasa','perspective')">
+											Perspective
+										  </label>
+
+										  <label class="pdb-3d-option">
+											<input type="radio" name="pdb-projection-sasa"
+												   value="orthographic"
+												   onchange="changePdbProjection('sasa','orthographic')">
+											Orthographic
+										  </label>
+										</div>
+									  </div>
+									</div>
+								  </div>
+								</div> 
+							</div>
+							
+							<!-- 2) Computed Predictions -->
+							<div id="computed-header-sasa" class="section-text flex items-center w-full" style="display:none; margin: 10px 0 0.25rem 0; gap: 1rem;">
+								<strong>COMPUTED PREDICTIONS <span id="selected-polymer-label-sasa"></span></strong>
+							</div>
+							<div id="predictions-section-sasa" class="result-section" style="display:none;">
+								<div id="predictions-sasa" class="section-text" style="margin: 0 0 1.5rem 0;"></div>
+							</div>
+
+							<!-- 3) Graph -->
+							<div class="result-section" id="graph-section-sasa" style="display:none;">
+							  <button id="toggle-size-btn-sasa"
+									  class="button-style w-full mt-4 mb-4"
+									  onclick="toggleGraphSize('graph-sasa','toggle-size-btn-sasa')">
+								   📐 Resize Graph for Publication
+							  </button>
+
+							  <h3 class="section-title">Graph: Length vs SASA for <span id="graph-title-polymer-sasa"></span></h3>
+							  <div id="graph-sasa" class="plot-wrap" style="margin-bottom: 1rem;"></div>
+  
+							  <!-- SASA stats heading + inline selection (same style as GRADIUS) -->
+							  <div class="section-text flex items-center w-full"
+								   style="margin: 0 0 0.25rem 0; gap: 1rem;">
+								<strong>SASA stats:</strong>
+							  </div>
+
+							  <!-- SASA numeric stats -->
+							  <div id="stats-sasa" class="section-text" style="margin: 0 0 1.5rem 0;"></div>
+							</div>
+						</div>
+					</div>
+
+					<!-- Diffusion Coefficient page, can remain empty initially -->
+				    <!--
+					<div class="content" id="diffusion">
+						<div class="card bg-white p-6 shadow-md">
+							<h2 class="section-title" style="margin-bottom: 2rem;">📊 Properties Generator: Diffusion Coefficient</h2>
+							<p class="section-text">Module coming soon!</p>
+						</div>
+					</div>
+					-->
+                    <div class="content" id="application">
+                        <div class="card bg-white p-6 shadow-md">
+                            <h2 class="section-title" style="margin-bottom: 1.25rem;">🧬 Application in Nanoplatform Design</h2>
+							
+							<div class="section-text" style="line-height: 1.55; max-width: 1200px;">
+                              <p style="margin-bottom: 0.9rem;">
+							    <strong>Design Optimization:</strong><br>
+								Use predicted properties to identify polymers with ideal dimensions and surface characteristics for efficient nanoparticle assembly.
+							  </p>
+							  
+							  <p style="margin-bottom: 0.9rem;">
+								<strong>Personalized Medicine Development:</strong><br> 
+								Customize polymer formulations to meet specific drug or gene delivery needs, minimizing experimental trial-and-error.
+							  </p>
+							  
+							  <p style="margin-bottom: 0;">
+								<strong>Accelerate R&D:</strong><br> 
+								Expedite the discovery process by focusing on the most promising candidates early, reducing costs and development time.
+							  </p>
+							</div>
+							
+                        </div>
+                    </div>
+					<div class="content" id="objectives">
+						<div class="card bg-white p-6 shadow-md">
+							<h2 class="section-title" style="margin-bottom: 1.25rem;">🎯 Research & Innovation Objectives</h2>
+							
+							<div class="section-text" style="line-height: 1.55; max-width: 1200px;">							
+							  <p style="margin-bottom: 0.9rem;">
+							    Our platform aligns with key project goals:
+							  </p>
+							  
+							  <p style="margin-bottom: 0.9rem;">
+								Enabling adaptive design of polymer-based nanoplatforms (PBNs) tailored for targeted drug and gene delivery.
+							  </p>
+							  
+							  <p style="margin-bottom: 0.9rem;">
+								Developing multi-stage protocols for engineering stable, self-assembling polymer nanostructures.
+							  </p>
+							  
+							  <p style="margin-bottom: 0;">
+								Providing in silico validation tools to ensure candidate polymers are effective and stable for delivery applications.
+							  </p>
+							</div>
+							
+						</div>
+					</div>
+                    <div class="content" id="learn-more">
+						<div class="card bg-white p-6 shadow-md">
+							<h2 class="section-title" style="margin-bottom: 1.25rem;">📘 Learn More</h2>
+
+							<div class="section-text" style="line-height: 1.55; max-width: 1200px;">
+							  <p style="margin-bottom: 0.9rem;">
+								Gain deeper insights into how computational modeling is revolutionizing polymer nanomedicine.
+							  </p>
+
+							  <p style="margin-bottom: 0.9rem;">
+								<strong>Project Abstract:</strong>
+								Advances in gene therapy and nanotechnology require efficient delivery vectors. This project introduces a
+								machine learning-driven computational approach to design and validate polymer nanoplatforms for personalized
+								medicine, aiming to reduce socio-economic burdens and improve therapeutic outcomes.
+							  </p>
+
+							  <p style="margin-bottom: 0;">
+								<strong>Objectives Overview:</strong>
+								From adaptive design strategies to in silico validation, our research harnesses AI to innovate drug and gene
+								delivery systems.
+							  </p>
+							</div>
+
+						<hr class="my-6 border-gray-300">
+							<h2 class="section-title" style="margin-bottom: 1.25rem;">📚 AdaptDelivery Documentation</h2>
+							
+							<div class="section-text" style="line-height: 1.55; max-width: 1200px;">
+							  <p style="margin-bottom: 0.9rem;">
+								This documentation provides a detailed scientific and technical overview of the AdaptDelivery platform.
+								It explains the molecular modeling workflow, the structural descriptors used for prediction, the mathematical
+								definitions of the computed properties, the machine learning framework, and the way users should interpret
+								the platform outputs.
+							  </p>
+							</div>  
+
+						<div class="doc-layout">
+						  <!-- Table of contents -->
+						  <aside class="doc-toc section-text">
+							<div class="doc-toc-title">Contents</div>
+							 <a href="#doc-overview">1. Platform Overview</a>
+							 <a href="#doc-workflow">2. Computational Workflow</a>
+							 <a href="#doc-polymers">3. Supported Polymer Systems</a>
+							 <a href="#doc-md">4. Molecular Dynamics Simulations</a>
+							 <a href="#doc-rg">5. Radius of Gyration</a>
+							 <a href="#doc-sasa">6. Solvent-Accessible Surface Area</a>
+							 <a href="#doc-data">7. Structural Dataset Generation</a>
+							 <a href="#doc-ml">8. Machine Learning Models</a>
+							 <a href="#doc-training">9. Training Procedure</a>
+							 <a href="#doc-performance">10. Model Performance and Validation</a>
+							 <a href="#doc-platform">11. Online Platform Usage</a>
+							 <a href="#doc-limitations">12. Current Limitations</a>
+							 <a href="#doc-citation">13. Citation and Availability</a>
+							 <a href="#doc-references">14. References</a>
+						  </aside>
+
+						  <!-- Main documentation content -->
+						  <div class="doc-main">
+						  
+							<section id="doc-overview" class="doc-section">
+							  <h3>1. Platform Overview</h3>
+							  <p>
+								<strong>AdaptDelivery</strong> is a polymer informatics platform that integrates
+								molecular modeling, molecular dynamics simulations, machine learning and interactive
+								web technologies to support the rapid prediction and visualization of polymer
+								structural properties.
+							  </p>
+							  <p>
+								The platform was developed to reduce the computational effort associated with
+								conventional molecular dynamics workflows. Instead of performing a new simulation
+								for every polymer system and chain length, users can obtain machine learning-based
+								predictions directly through a standard web browser.
+							  </p>
+							  <p>
+								The current version focuses on two key structural descriptors:
+								<strong>radius of gyration (Rg)</strong> and
+								<strong>solvent-accessible surface area (SASA)</strong>. These properties provide
+								information about polymer dimensions, compactness, conformational behavior,
+								solvent exposure, hydration, and possible aggregation tendencies.
+							  </p>
+							  <p>
+								In addition to numerical predictions, AdaptDelivery provides interactive
+								property-versus-chain-length graphs and browser-based three-dimensional visualization
+								of generated polymer structures, allowing users to inspect both predicted values and
+								the corresponding molecular representation within the same interface.
+							  </p>
+							  
+							  <div class="doc-highlight">
+								<strong>Platform objective:</strong>&nbsp;
+								to provide fast, accessible, and reproducible polymer property predictions
+								through a unified online environment for real-time prediction and interactive
+								visualization.
+							  </div>
+							</section>
+
+							<section id="doc-workflow" class="doc-section">
+							  <h3>2. Computational Workflow</h3>
+							  <p>
+								The AdaptDelivery workflow integrates molecular modeling, molecular dynamics
+								simulations, structural descriptor extraction, machine learning model development,
+								and web-based deployment within a unified computational framework.
+							  </p>
+							  <p>
+								Representative synthetic and natural polymer systems are first constructed and
+								solvated in water. Molecular dynamics simulations are then performed to capture
+								polymer conformational behavior and polymer–solvent interactions over time.
+							  </p>
+							  <p>
+								The resulting molecular trajectories are analyzed to calculate two key structural
+								descriptors: the <strong>radius of gyration (Rg)</strong> and the
+								<strong>solvent-accessible surface area (SASA)</strong>. These values are used to
+								generate the datasets required for training and evaluating the artificial neural
+								network models.
+							  </p>
+							  <p>
+								After training and validation, the predictive models are integrated into the
+								AdaptDelivery online platform. Users can select a polymer and chain length to obtain
+								real-time property predictions, interactive graphs, and a browser-based
+								three-dimensional representation of the generated polymer structure.
+							  </p>
+
+							  <div class="doc-highlight">
+								<strong>Workflow:</strong>&nbsp;
+								Polymer construction
+								→ Molecular dynamics simulation
+								→ Structural descriptor extraction
+								→ ANN training and validation
+								→ Real-time prediction
+								→ 2D and 3D visualization
+							  </div>
+							</section>
+
+							<section id="doc-polymers" class="doc-section">
+							  <h3>3. Supported Polymer Systems</h3>
+							  <p>
+								The current version of the AdaptDelivery platform supports both synthetic
+								and natural polymer systems. The polymers are organized through a hierarchical
+								selection workflow based on
+								<strong>Polymer Class</strong>,
+								<strong>Polymer Type</strong>, and
+								<strong>Polymer Name</strong>.
+							  </p>
+							  <h4>Synthetic polymers</h4>
+							  <p>
+								The synthetic polymer dataset includes representative systems from several chemical
+								families, including acrylamides, amines, amides, imines, ketones, olefins, oxides,
+								and vinyl-based polymers.
+							  </p>
+							  <p>
+								The synthetic polymers currently supported by the AdaptDelivery framework are:
+								Polyethylene (PE),
+								Polyethylene oxide (PEO),
+								Polyethyleneimine (PEI),
+								Polyacrylamide (PAM),
+								Poly(allyamine), isotactic R configuration (PAAMR),
+								Poly(N-isopropylacrylamide), isotactic R configuration (PNIPAAMR),
+								and
+								Poly(vinyl methyl ketone), isotactic R configuration (PVMKR).
+							  </p>
+							  <h4>Natural polymers</h4>
+							  <p>
+								The natural polymer class currently includes representative lignin-based units:
+								the Guaiacyl unit (GUAI),
+								the p-Hydroxyphenyl unit (PHP), and
+								the Syringyl unit (SYR), modeled within the CHARMM force-field framework
+								(<a href="#ref-9" class="doc-citation">Vermaas <em>et al.</em> 2019</a>).
+							  </p>
+
+							  <div class="doc-highlight">
+								<strong>Polymer selection hierarchy:</strong>&nbsp;
+								Polymer Class
+								→ Polymer Type
+								→ Polymer Name
+							  </div>
+							</section>
+
+							<section id="doc-md" class="doc-section">
+							  <h3>4. Molecular Dynamics Simulations</h3>
+							  <p>
+								Molecular dynamics simulations are used to investigate the conformational behavior
+								of polymer chains in aqueous environments and to generate the reference data required
+								for machine learning model development.
+							  </p>
+							  <p>
+								The molecular topology and parameter files for each polymer are generated using
+								CHARMM-GUI
+								(<a href="#ref-1" class="doc-citation">Choi <em>et al.</em> 2021</a>;
+								<a href="#ref-4" class="doc-citation">Jo <em>et al.</em> 2008</a>). 
+								The resulting polymer systems are subsequently simulated with NAMD 3.0 
+								(<a href="#ref-7" class="doc-citation">Phillips <em>et al.</em> 2020</a>)
+								using the CHARMM36 all-atom force field
+								(<a href="#ref-2" class="doc-citation">Huang and MacKerell 2013</a>;
+								<a href="#ref-8" class="doc-citation">Vanommeslaeghe <em>et al.</em> 2009</a>).
+							  </p>
+							  <p>
+								Each polymer system is first equilibrated for <strong>3 ns</strong>, followed by a
+								<strong>200 ns</strong> production simulation using a <strong>2 fs</strong> integration
+								timestep. The simulations are performed at a temperature of
+								<strong>300 K</strong> and a pressure of <strong>1 atm</strong>.
+							  </p>
+							  <p>
+								Temperature is controlled using a Langevin thermostat with a damping coefficient
+								of <strong>1 ps<sup>−1</sup></strong>, while pressure is maintained using a
+								Langevin piston. Bonds involving hydrogen atoms are constrained with the SHAKE
+								algorithm. Long-range electrostatic interactions are treated using the Particle
+								Mesh Ewald method with a grid spacing of <strong>1 Å</strong> and a cutoff
+								distance of <strong>12 Å</strong>.
+							  </p>
+							  <p>
+								Periodic boundary conditions are applied to mimic an infinite system. During the
+								simulations, the energy and temperature of each system are monitored to ensure
+								stability and support the generation of high-quality, reproducible data.
+							  </p>
+
+							  <div class="doc-highlight">
+								<strong>Simulation protocol:</strong>&nbsp;
+								CHARMM-GUI preparation 
+								→ NAMD 3.0
+								→ CHARMM36 all-atom force field
+								→ 3 ns equilibration
+								→ 200 ns production run
+								→ 2 fs timestep
+								→ 300 K
+								→ 1 atm
+							  </div>
+							</section>
+
+							<section id="doc-rg" class="doc-section">
+							  <h3>5. Radius of Gyration</h3>
+							  <p>
+								The radius of gyration, denoted by <strong>R<sub>g</sub></strong>, is a fundamental
+								descriptor of polymer size and conformational organization. It quantifies the spatial
+								distribution of the polymer atoms around the center of mass and is commonly used to
+								characterize the compactness and spatial extent of a polymer chain in solution:
+							  </p>
+
+							  <div class="doc-highlight doc-math">
+								\[
+								  R_g =
+								  \sqrt{
+									\frac{1}{N}
+									\sum_{i=1}^{N}
+									\left\|\mathbf{r}_i-\mathbf{r}_{\mathrm{cm}}\right\|^2
+								  }.
+								\]
+							  </div>
+							  
+							  <p>
+								Here, <em>N</em> is the number of selected polymer atoms,
+								<em>r<sub>i</sub></em> is the position vector of atom <em>i</em>, and
+								<em>r<sub>cm</sub></em> is the position vector of the polymer center of mass:
+							  </p>
+
+							  <div class="doc-highlight doc-math">
+								\[
+								  \mathbf{r}_{\mathrm{cm}} =
+								  \frac{
+									\sum_{i=1}^{N} m_i\mathbf{r}_i
+								  }{
+									\sum_{i=1}^{N} m_i
+								  }.
+								\]
+							  </div>
+							  
+							  <p>
+								For each molecular dynamics trajectory frame, the center of mass is calculated using
+								atomic masses, after which the radius of gyration is evaluated as the root-mean-square
+								distance of the selected atoms from that center.
+							  </p>
+							  <p>
+								Calculating R<sub>g</sub> independently for every trajectory frame makes it possible
+								to analyze conformational fluctuations and the temporal evolution of polymer size.
+								In general, lower R<sub>g</sub> values correspond to more compact conformations,
+								whereas higher values indicate a more spatially extended polymer chain.
+							  </p>
+
+							  <div class="doc-highlight">
+								<strong>Platform interpretation:</strong>&nbsp;
+								AdaptDelivery predicts the radius of gyration as a function of the selected polymer
+								system and monomer number.
+							  </div>
+							</section>
+
+							<section id="doc-sasa" class="doc-section">
+							  <h3>6. Solvent-Accessible Surface Area</h3>
+							  <p>
+								The solvent-accessible surface area, denoted by <strong>SASA</strong>, quantifies
+								the extent of the polymer surface that is accessible to solvent molecules, typically
+								water. It is an important structural descriptor for characterizing polymer–solvent
+								interactions, hydration, folding, conformational changes, and aggregation behavior:
+							  </p>
+
+							  <div class="doc-highlight doc-math">
+								\[
+								  A_{\mathrm{SASA}} = \sum_i A_i.
+								\]
+							  </div>
+							  
+							  <p>
+								Here, <em>A<sub>i</sub></em> represents the solvent-accessible surface area
+								contribution associated with atom <em>i</em>.
+							  </p>
+							  <p>
+								SASA is calculated by rolling a spherical solvent probe over the molecular surface.
+								In the AdaptDelivery molecular dynamics workflow, a probe radius of
+								<strong>1.4 Å</strong> is used to represent a water molecule:
+							  </p>
+
+							  <div class="doc-highlight doc-math">
+								\[
+								  r_{\mathrm{probe}} = 1.4\ \text{Å}.
+								\]
+							  </div>
+							  
+							  <p>
+								The calculation is performed independently for each frame of the molecular dynamics
+								trajectory using the VMD software package
+								(<a href="#ref-3" class="doc-citation">Humphrey <em>et al.</em> 1996</a>).
+								The selected polymer atoms are analyzed while excluding the surrounding solvent,
+								and the accessible surface contributions are summed to obtain the total SASA value.
+							  </p>
+							  <p>
+								This frame-by-frame analysis makes it possible to monitor changes in solvent exposure
+								and polymer conformation over time. In general, larger SASA values indicate greater
+								exposure of the polymer surface to the surrounding solvent.
+							  </p>
+
+							  <div class="doc-highlight">
+								<strong>Platform interpretation:</strong>&nbsp;
+								AdaptDelivery predicts the solvent-accessible surface area as a function of the
+								selected polymer system and monomer number.
+							  </div>
+							</section>
+							
+							<section id="doc-data" class="doc-section">
+							  <h3>7. Structural Dataset Generation</h3>
+							  <p>
+								Reference values for the radius of gyration and solvent-accessible surface area
+								were calculated from molecular dynamics simulations for representative polymer
+								chain lengths:
+							  </p>
+
+							  <div class="doc-highlight doc-math">
+								\[
+								  n \in \left\{5,\,8,\,10,\,12,\,16,\,25,\,50,\,100,\,150,\,200\right\}.
+								\]
+							  </div>
+
+							  <p>
+								To construct a continuous relationship between monomer number and polymer property,
+								the tabulated molecular dynamics values were fitted using a power-law function:
+							  </p>
+
+							  <div class="doc-highlight doc-math">
+								\[
+								  f(x;a,b)=a\,x^b.
+								\]
+							  </div>
+
+							  <p>
+								Here, <em>x</em> represents the monomer number, while <em>a</em> and
+								<em>b</em> are fitting parameters determined through nonlinear least-squares
+								fitting using the <code>curve_fit</code> function from the SciPy computational
+								library
+								(<a href="#ref-10" class="doc-citation">Virtanen <em>et al.</em> 2020</a>).
+							  </p>
+							  <p>
+								The fitted power-law relationship was evaluated for monomer numbers up to 1000
+								and used to generate <strong>20,000</strong> pairs consisting of a monomer number
+								and the corresponding polymer property value.
+							  </p>
+
+							  <div class="doc-highlight">
+								<strong>Dataset generation workflow:</strong>&nbsp;
+								Molecular dynamics reference values
+								→ Power-law fitting
+								→ Evaluation up to 1000 monomers
+								→ 20,000 property pairs
+								→ Training, validation and test datasets
+							  </div>
+							</section>
+
+							<section id="doc-ml" class="doc-section">
+							  <h3>8. Machine Learning Models</h3>
+							  <p>
+								AdaptDelivery uses artificial neural networks to learn the relationship between
+								polymer chain length and structural properties derived from molecular dynamics
+								simulations. Once trained, the models can generate predictions on a substantially
+								shorter timescale than running a new molecular dynamics simulation for each input.
+							  </p>
+							  <p>
+								The monomer number is used as the input variable, while the output of the neural
+								network is the predicted polymer property:
+							  </p>
+
+							  <div class="doc-highlight doc-math">
+								\[
+								  x \xrightarrow{\mathrm{ANN}} \widehat{P}(x).
+								\]
+							  </div>
+							  
+							  <p>
+								Separate models are used for the prediction of
+								<strong>radius of gyration (Rg)</strong> and
+								<strong>solvent-accessible surface area (SASA)</strong>, because these properties lie on different numerical scales.
+							  </p>
+							  <h4>Radius of gyration model</h4>
+							  <p>
+								For the Rg prediction model, the study reports an architecture containing an input
+								layer, one fully connected hidden layer with a channel size of
+								<strong>16</strong>, and an output layer that returns the predicted radius of
+								gyration. Several alternative architectures were also investigated.
+							  </p>
+							  <h4>Solvent-accessible surface area model</h4>
+							  <p>
+								The SASA prediction model uses a deeper fully connected architecture with three
+								hidden layers containing <strong>64</strong>, <strong>32</strong>, and
+								<strong>16 channels</strong>, respectively.
+							  </p>
+							  <p>
+								Nonlinearity is introduced through the rectified linear unit activation function:
+							  </p>
+
+							  <div class="doc-highlight doc-math">
+								\[
+								  \operatorname{ReLU}(z)=\max(0,z).
+								\]
+							  </div>
+							  
+							  <p>
+								Here, <em>z</em> represents the linear activation of a neuron, obtained from the
+								weighted input values and the corresponding bias term. The ReLU activation introduces 
+								nonlinearity into the neural network models.
+							  </p>
+
+							  <div class="doc-highlight">
+							    <strong>Current modeling strategy:</strong>&nbsp;
+								Separate property-specific ANN models
+								→ R<sub>g</sub> prediction
+								→ SASA prediction
+								→ Real-time deployment within AdaptDelivery
+							  </div>
+							</section>
+							
+							<section id="doc-training" class="doc-section">
+							  <h3>9. Training Procedure</h3>
+							  <p>
+								The artificial neural networks are trained using supervised learning. For each
+								input monomer number, the corresponding reference value of the polymer property
+								is known from the generated dataset and is used as the target value during
+								model optimization.
+							  </p>
+							  <p>
+								Before training, the complete dataset is randomly shuffled and divided into
+								three subsets:
+							  </p>
+
+							  <div class="doc-highlight">
+								<strong>Dataset partition:</strong>&nbsp;
+								80% training set
+								→ 10% validation set
+								→ 10% test set
+							  </div>
+							  <p>
+								The training set is used to optimize the neural-network parameters. The validation
+								set is evaluated after each training cycle to monitor model performance and detect
+								possible overfitting, while the test set is reserved for the final evaluation of
+								the fully trained model.
+							  </p>
+							  <p>
+								Training samples are processed in mini-batches of <strong>128</strong>. For each
+								mini-batch, the difference between the predicted property values and the
+								corresponding reference values is calculated using the mean absolute error:
+							  </p>
+
+							  <div class="doc-highlight doc-math">
+								\[
+								  E_1 =
+								  \frac{1}{m}
+								  \sum_{i=1}^{m}
+								  \left|
+									P_i^{\mathrm{predicted}}
+									-
+									P_i^{\mathrm{label}}
+								  \right|.
+								\]
+							  </div>
+
+							  <p>
+								Here, <em>m = 128</em> is the mini-batch size,
+								<em>P<sub>i</sub><sup>predicted</sup></em> is the property value returned by
+								the neural network, and
+								<em>P<sub>i</sub><sup>label</sup></em> is the corresponding reference value.
+							  </p>
+							  <p>
+								The objective of the training process is to minimize this error with respect to
+								the network parameters. Optimization is performed using the
+								<strong>Adam algorithm</strong>
+								(<a href="#ref-5" class="doc-citation">Kingma and Ba 2014</a>), which applies stochastic gradient-based updates.
+								The error gradient is propagated backward through the network, and the model
+								parameters are updated iteratively.
+							  </p>
+
+							  <div class="doc-highlight">
+								<strong>Training cycle:</strong>&nbsp;
+								Mini-batch input
+								→ Forward propagation
+								→ Property prediction
+								→ Error calculation
+								→ Backpropagation
+								→ Parameter update
+							  </div>
+							</section>
+							
+							<section id="doc-performance" class="doc-section">
+							  <h3>10. Model Performance and Validation</h3>
+							  <p>
+								The predictive performance of the models was evaluated using the test set reserved
+								during dataset partitioning. Model accuracy was assessed separately for each polymer 
+								system and for each predicted structural property.
+							  </p>
+							  <p>
+								The principal evaluation metric was the
+								<strong>mean absolute error (MAE)</strong>, which measures the average absolute
+								difference between the predicted property values and the corresponding reference
+								values:
+							  </p>
+
+							  <div class="doc-highlight doc-math">
+								\[
+								  \operatorname{MAE} =
+								  \frac{1}{N}
+								  \sum_{i=1}^{N}
+								  \left|
+									P_i^{\mathrm{predicted}}
+									-
+									P_i^{\mathrm{label}}
+								  \right|.
+								\]
+							  </div>
+
+							  <p>
+								In addition to MAE, the mean predicted test-set value
+								(<strong>MPTS</strong>) and the mean label test-set value
+								(<strong>MLTS</strong>) were calculated to provide a direct comparison between
+								model predictions and expected values.
+							  </p>
+							  <p>
+								The results showed strong agreement between predicted and reference values across
+								the investigated synthetic and natural polymer systems. The reported MAE values
+								were small relative to the corresponding mean property values, supporting the
+								predictive accuracy of the models.
+							  </p>
+							  <p>
+								As an additional comparison with previously published molecular dynamics results,
+								the model predicted a radius of gyration of approximately
+								<strong>8.97 Å</strong> for PEO with 18 monomers, compared with the
+								<strong>9.53 Å</strong> value reported by
+								(<a href="#ref-6" class="doc-citation">Lee <em>et al.</em> 2008</a>).
+							  </p>
+
+							  <div class="doc-highlight">
+								<strong>Evaluation strategy:</strong>&nbsp;
+								Test set
+								→ Polymer-specific evaluation
+								→ Property-specific MAE
+								→ Comparison of predicted and reference values
+							  </div>
+							</section>
+							
+							<section id="doc-platform" class="doc-section">
+							  <h3>11. Online Platform Usage</h3>
+							  <p>
+								AdaptDelivery provides a structured workflow for generating polymer property
+								predictions directly through the web interface. Users begin by opening the
+								<strong>Properties Generator</strong> and selecting the desired prediction module:
+								<strong>Radius of Gyration (Rg)</strong> or
+								<strong>Solvent-Accessible Surface Area (SASA)</strong>.
+							  </p>
+							  <p>
+								The prediction and visualization modules can be accessed either through a
+								registered user account or through the <strong>Guest access</strong> option,
+								which allows the platform to be used without mandatory registration.
+								Registered users can additionally access <strong>Prediction History</strong>,
+								where previous predictions can be reviewed and deleted.
+							  </p>
+							  <p>
+								The polymer system is selected through a hierarchical input structure based on
+								<strong>Polymer Class</strong>, <strong>Polymer Type</strong>, and
+								<strong>Polymer Name</strong>. After a polymer is selected, the platform displays
+								its full name and corresponding two-dimensional chemical representation, providing
+								visual confirmation before the prediction is generated.
+							  </p>
+							  <p>
+								The user then enters a single integer representing the polymer chain length or
+								monomer number. The currently accepted prediction range is:
+							  </p>
+
+							  <div class="doc-highlight doc-math">
+								\[
+								  1 \leq n \leq 1000.
+								\]
+							  </div>
+							  
+							  <p>
+								This interval corresponds to the monomer-number range covered by the machine
+								learning datasets. Although the integrated PDB generators can produce longer polymer
+								chains, predictions are restricted to the same range used for model training and
+								evaluation.
+							  </p>
+							  <p>
+								After the input is submitted, the platform automatically standardizes and scales the
+								numerical data according to the requirements of the trained model. The corresponding
+								artificial neural network is then executed to generate the requested polymer
+								property prediction.
+							  </p>
+							  <p>
+								The resulting output includes the predicted property value, an interactive
+								property-versus-chain-length graph, and a browser-based three-dimensional
+								visualization of the generated polymer structure.
+							  </p>
+							  <p>
+								The platform backend is implemented in Python using Flask, while pre-trained
+								neural network models are loaded for inference using PyTorch. Interactive
+								property plots are generated using Plotly.js and dynamically generated PDB
+								structures are rendered directly in the browser using 3Dmol.js. PostgreSQL
+								supports user registration, authentication and platform data management.
+							  </p>
+
+							  <div class="doc-highlight">
+								<strong>User workflow:</strong>&nbsp;
+								Select prediction module
+								→ Select polymer system
+								→ Enter monomer number
+								→ Generate prediction
+								→ Explore numerical, graphical, and structural results
+							  </div>
+							</section>
+							
+							<section id="doc-limitations" class="doc-section">
+							  <h3>12. Current Limitations</h3>
+							  <p>
+								The current machine learning models support polymer chain lengths from
+								<strong>1 to 1000 monomers</strong>. This restriction corresponds to the interval
+								covered by the generated training, validation, and test datasets. Predictions are
+								therefore restricted to the same range used for model training and evaluation.
+							  </p>
+							  <p>
+								The current version of AdaptDelivery predicts two structural descriptors:
+								<strong>radius of gyration (Rg)</strong> and
+								<strong>solvent-accessible surface area (SASA)</strong>. Separate property-specific
+								neural networks are used for these outputs.
+							  </p>
+							  <p>
+								The three-dimensional structure displayed in the browser is a dynamically generated,
+								strictly linear polymer chain in PDB format. It is produced on demand using the
+								custom Python-based polymer generator library and rendered directly in the browser.
+							  </p>
+							  <p>
+								Predictions are available only for polymer systems that have already been included
+								in the scientific workflow. Adding a new polymer requires the generation of molecular
+								dynamics data, extraction of structural descriptors, construction of the corresponding
+								dataset, model training and validation, and integration into the platform backend.
+							  </p>
+
+							  <div class="doc-highlight">
+								<strong>Current scope:</strong>&nbsp;
+								Supported polymer systems
+								→ 1–1000 monomers
+								→ R<sub>g</sub> and SASA prediction
+								→ Linear PDB visualization
+								→ Property-specific ANN models
+							  </div>
+							</section>
+							
+							<section id="doc-citation" class="doc-section">
+							  <h3>13. Citation and Availability</h3>
+							  <p>
+								AdaptDelivery was developed as an online polymer informatics platform for the
+								real-time prediction and visualization of structural polymer properties. The
+								platform integrates molecular dynamics simulations, data-driven modeling,
+								artificial neural networks, and interactive web technologies within a unified
+								computational environment.
+							  </p>
+							  <p>
+								The scientific work associated with the AdaptDelivery platform is cited below.
+								Researchers who use AdaptDelivery in scientific studies, presentations, teaching
+								materials, or publications are encouraged to cite this work.
+							  </p>
+
+							  <div class="doc-highlight">
+								<strong>Recommended citation:</strong><br>
+								Parajdi L.G., Toth I., Farcas A.-A., Balint Z., Kiraly A., Farcas A.
+								  AdaptDelivery: A Polymer Informatics Platform for Predicting Structural
+								  Properties of Polymers via Machine Learning.
+								<em>Manuscript submitted for publication</em>, 2026.
+							  </div>							  
+
+							  <p>
+								According to the associated study, all data generated or analyzed during the 
+								research are included in the paper mentioned above.
+							  </p>
+							</section>
+							
+							<section id="doc-references" class="doc-section doc-references">
+							  <h3>14. References</h3>
+
+							  <ul class="doc-reference-list">
+
+								<li id="ref-1">
+								  Choi Y.K., Park S.J., Park S., Kim S., Kern N.R., Lee J., Im W.
+								  CHARMM-GUI Polymer Builder for modeling and simulation of synthetic polymers.
+								  <em>Journal of Chemical Theory and Computation</em>,
+								  17(4):2431–2443, 2021.
+								</li>
+
+								<li id="ref-2">
+								  Huang J., MacKerell A.D.
+								  CHARMM36 all-atom additive protein force field:
+								  validation based on comparison to NMR data.
+								  <em>Journal of Computational Chemistry</em>,
+								  34(25):2135–2145, 2013.
+								</li>
+
+								<li id="ref-3">
+								  Humphrey W., Dalke A., Schulten K.
+								  VMD: Visual Molecular Dynamics.
+								  <em>Journal of Molecular Graphics</em>,
+								  14(1):33–38, 1996.
+								</li>
+
+								<li id="ref-4">
+								  Jo S., Kim T., Iyer V.G., Im W.
+								  CHARMM-GUI: a web-based graphical user interface for CHARMM.
+								  <em>Journal of Computational Chemistry</em>,
+								  29(11):1859–1865, 2008.
+								</li>
+
+								<li id="ref-5">
+								  Kingma D.P., Ba J.
+								  Adam: a method for stochastic optimization.
+								  <em>arXiv preprint</em>, arXiv:1412.6980, 2014.
+								</li>
+
+								<li id="ref-6">
+								  Lee H., Venable R.M., MacKerell A.D., Pastor R.W.
+								  Molecular dynamics studies of polyethylene oxide and polyethylene glycol:
+								  hydrodynamic radius and shape anisotropy.
+								  <em>Biophysical Journal</em>,
+								  95(4):1590–1599, 2008.
+								</li>
+
+								<li id="ref-7">
+								  Phillips J.C., Hardy D.J., Maia J.D.C., <em>et al.</em>
+								  Scalable molecular dynamics on CPU and GPU architectures with NAMD.
+								  <em>The Journal of Chemical Physics</em>,
+								  153(4):044105, 2020.
+								</li>
+								
+								<li id="ref-8">
+								  Vanommeslaeghe K., Hatcher E., Acharya C., <em>et al.</em>
+								  CHARMM general force field: A force field for drug-like molecules compatible
+								  with the CHARMM all-atom additive biological force fields.
+								  <em>Journal of Computational Chemistry</em>,
+								  31(4):671–690, 2009.
+								</li>
+
+								<li id="ref-9">
+								  Vermaas J.V., Petridis L., Ralph J., Crowley M.F., Beckham G.T.
+								  Systematic parameterization of lignin for the CHARMM force field.
+								  <em>Green Chemistry</em>,
+								  21(1):109–122, 2019.
+								</li>
+
+								<li id="ref-10">
+								  Virtanen P., Gommers R., Oliphant T.E., <em>et al.</em>
+								  SciPy 1.0: fundamental algorithms for scientific computing in Python.
+								  <em>Nature Methods</em>,
+								  17(3):261–272, 2020.
+								</li>
+							  </ul>
+							</section>
+	
+						  </div>
+						</div>
+					  </div>
+					</div>
+					<div class="content" id="contact">
+						<div class="card bg-white p-6 shadow-md">
+							<h2 class="section-title" style="margin-bottom: 1.25rem;">📩 Contact</h2>
+							
+							<div class="section-text" style="line-height: 1.55; max-width: 1200px;">							
+							  <p style="margin-bottom: 0;">
+								Begin predicting polymer properties today and accelerate your nanoplatform development. For inquiries or collaboration opportunities, contact us at <a href="mailto:contact@adaptdelivery.org">contact@adaptdelivery.org</a>.
+							  </p>
+							</div>
+							
+						</div>
+					</div>
+                </main>
+            </div>
+        </div>
+        <footer>
+            <p>© 2025-2026 Research Platform • 
+			<button type="button"
+					style="background: transparent; border: none; color: inherit; padding: 0; cursor: pointer; font: inherit;"
+					onclick="openLearnMoreDocumentation()">
+			  Documentation
+			</button> 
+			• Webmaster: Lorand Gabriel Parajdi, Ph.D. • Version 2.3 • All rights reserved</p>
+        </footer>
+		
+		
+        <!-- Login Modal -->
+        <div class="fixed inset-x-0 top-12 bottom-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50" id="loginModal">
+            <div class="bg-white bg-opacity-95 p-6 rounded shadow-md w-full max-w-sm backdrop-blur">
+                <h2 class="text-xl font-bold mb-4">Login</h2>
+
+                <label class="text-sm font-semibold">User ID (Email address)</label>
+                <input class="w-full border p-2 rounded mb-2" id="loginEmail" placeholder="Email" type="email" />
+
+                <label class="text-sm font-semibold">Password</label>
+                <input class="w-full border p-2 rounded mb-2" id="loginPassword" placeholder="Password" type="password" />
+
+                <!-- Google reCAPTCHA (Login) -->
+				<div class="mt-2 mb-2">
+				  <div id="recaptcha-login"></div>
+				</div>
+
+                <p id="loginMessage" class="text-red-500 text-sm mb-2 hidden"></p>
+
+                <div class="flex items-center w-full mt-2">
+					<button class="button-style w-32" onclick="loginUser()">Login</button>
+
+					<span class="flex-1 text-center text-sm text-gray-500">or</span>
+
+					<button type="button" class="button-style w-32" onclick="accessAsGuest()">Access as Guest</button>
+					
+				</div>
+
+                <div class="flex justify-between items-center mt-2 text-sm">
+                    <p class="text-blue-600 cursor-pointer" onclick="showForgotPasswordModal()">Forgot Password?</p>
+                    <p class="text-green-600 cursor-pointer" onclick="showSignUpModal()">Sign up</p>
+                </div>
+
+                <button class="mt-2 text-sm text-red-500" onclick="closeModal('loginModal')">Close</button>
+            </div>
+        </div>
+		
+        <!-- Sign Up Modal -->
+        <div class="fixed inset-x-0 top-12 bottom-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50" id="signUpModal">
+            <div class="bg-white bg-opacity-95 p-6 rounded shadow-md w-full max-w-sm backdrop-blur">
+                <h2 class="text-xl font-bold mb-2">Sign Up</h2>
+
+                <label class="text-sm font-semibold">Name</label>
+                <input class="w-full border p-2 rounded mb-2" id="name" placeholder="First and Last Name" type="text" />
+
+                <label class="text-sm font-semibold">User ID (Email address)</label>
+                <input class="w-full border p-2 rounded mb-2" id="signUpEmail" placeholder="Email" type="email" />
+
+                <label class="text-sm font-semibold">Organization</label>
+                <input class="w-full border p-2 rounded mb-2" id="organization" placeholder="Organization" type="text" />
+
+                <div class="text-sm font-semibold mb-2">Affiliation:</div>
+                <div class="flex flex-col text-sm text-gray-800 mb-2">
+                    <label><input type="radio" class="mr-2" value="Academia" name="affiliation"> Academia</label>
+                    <label><input type="radio" class="mr-2" value="National/Federal Research Institute" name="affiliation"> National/Federal Research Institute</label>
+                    <label><input type="radio" class="mr-2" value="Industry" name="affiliation"> Industry</label>
+                    <label><input type="radio" class="mr-2" value="Other" name="affiliation"> Other</label>
+                </div>
+
+                <label class="text-sm font-semibold">Password</label>
+                <input class="w-full border p-2 rounded mb-1" id="signUpPassword" placeholder="Password" type="password" oninput="validatePassword()" />
+                <p id="passwordNumber" class="text-red-500 text-xs hidden">*Password must contain at least one number.</p>
+				<p id="passwordLength" class="text-red-500 text-xs hidden">*Password length must be at least 8 characters.</p>
+				<p id="passwordUpper" class="text-red-500 text-xs hidden">*Password must contain at least one uppercase letter.</p>
+				<p id="passwordSpecial" class="text-red-500 text-xs mb-2 hidden">*Password must contain at least one special character.</p>
+
+                <label class="text-sm font-semibold">Confirm Password</label>
+                <input class="w-full border p-2 rounded mb-0" id="confirmPassword" placeholder="Confirm Password" type="password" oninput="validateConfirmPassword()" />
+			    
+                <p id="confirmMessage" class="text-red-500 text-xs mb-4 hidden">*Passwords are not matching.</p>
+			
+                <p id="signUpMessage" class="text-red-500 text-sm mt-4 mb-2 hidden"></p>
+				
+				<!-- Google reCAPTCHA (Sign Up) -->
+				<div class="mt-4 mb-2">
+				  <div id="recaptcha-signup"></div>
+				</div>
+
+                <button class="button-style w-full mt-2" onclick="signUpUser()">Create Account</button>
+
+                <div class="flex justify-between items-center mt-2 text-sm">
+                    <p class="text-red-500 cursor-pointer" onclick="closeModal('signUpModal')">Close</p>
+                    <p class="text-green-600 cursor-pointer" onclick="showLoginModal()">Login</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Forgot Password Modal -->
+        <div class="fixed inset-x-0 top-12 bottom-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50" id="forgotPasswordModal">
+          <div class="bg-white bg-opacity-95 p-6 rounded shadow-md w-full max-w-sm backdrop-blur">
+            <h2 class="text-xl font-bold mb-4">Recover Password</h2>
+
+            <label class="text-sm font-semibold">Email address</label>
+            <input class="w-full border p-2 rounded mb-2" id="recoverEmail" placeholder="Enter your email" type="email" />
+
+            <!-- Success/Error message shown ABOVE the Recover button -->
+            <p id="forgotPasswordMessage" class="text-sm hidden text-center mb-0 leading-snug"></p>
+
+			<!-- Google reCAPTCHA (Forgot Password) -->
+			<div class="mt-2 mb-2">
+				<div id="recaptcha-forgot"></div>
+			</div>
+
+			<button class="button-style w-full mt-2" onclick="recoverPassword()">Recover</button>
+
+            <button class="mt-2 text-sm text-red-500" onclick="closeModal('forgotPasswordModal')">Close</button>
+          </div>
+        </div>
+		
+		<!-- Email Confirmation Modal -->
+        <div class="fixed inset-x-0 top-12 bottom-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50" id="emailConfirmationModal">
+            <div class="bg-white bg-opacity-95 p-6 rounded shadow-md w-full max-w-md text-center backdrop-blur">
+              <h1 id="confirmationTitle" class="text-2xl font-semibold mb-4"></h1>
+              <p id="confirmationMessage1" class="text-gray-700 leading-tight mb-0"></p>
+              <p id="confirmationMessage2" class="text-gray-700 leading-tight mt-0"></p>
+              <p id="confirmationNote" class="text-gray-600 text-sm mt-3 mb-4"></p>
+			<div class="mt-4 flex justify-center">
+			  <button id="confirmationActionButton" onclick="handleConfirmationAction()" class="button-style w-full">Go to Login</button>
+			</div>
+            </div>
+        </div>
+		
+		<!-- Reset Password Modal -->
+        <div id="resetPasswordModal" class="fixed inset-x-0 top-12 bottom-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+          <div class="bg-white bg-opacity-95 p-6 rounded shadow-md w-full max-w-md text-center backdrop-blur">
+            <h1 class="text-2xl font-semibold text-blue-600 mb-4">Reset Your Password</h1>
+
+            <input id="newPassword" type="password" placeholder="New Password"
+                   class="input-style mb-2 w-full" oninput="validateResetPassword()">
+
+            <p id="resetNumber" class="text-left text-red-500 text-xs hidden">*Password must contain at least one number.</p>
+            <p id="resetLength" class="text-left text-red-500 text-xs hidden">*Password length must be at least 8 characters.</p>
+            <p id="resetUpper" class="text-left text-red-500 text-xs hidden">*Password must contain at least one uppercase letter.</p>
+            <p id="resetLower" class="text-left text-red-500 text-xs hidden">*Password must contain at least one lowercase letter.</p>
+            <p id="resetSpecial" class="text-left text-red-500 text-xs hidden mb-2">*Password must contain at least one special character.</p>
+
+            <input id="confirmNewPassword" type="password" placeholder="Confirm Password"
+                   class="input-style mb-2 w-full" oninput="validateResetConfirmPassword()">
+
+            <p id="resetConfirmMessage" class="text-red-500 text-xs mb-4 hidden">*Passwords are not matching.</p>
+
+            <p id="resetPasswordMessage" class="text-red-500 text-sm hidden mb-4"></p>
+
+            <div class="flex justify-center">
+              <button onclick="submitNewPassword()" class="button-style">Save New Password</button>
+            </div>
+          </div>
+        </div>
+		
+		<!-- Prediction History Modal -->
+		<div id="historyModal"
+			 class="fixed inset-x-0 top-12 bottom-0 bg-black bg-opacity-50 flex items-start justify-center hidden z-50"
+			 style="padding: 1.25rem 1rem 1rem 1rem;">
+
+		  <div class="bg-white bg-opacity-95 p-6 rounded shadow-md backdrop-blur flex flex-col"
+			   style="width: min(680px, calc(100vw - 2rem)); max-height: calc(100vh - 8rem); min-height: 0;">
+
+			<h2 class="text-xl font-bold mb-4"
+				style="flex-shrink: 0;">
+			  Prediction History
+			</h2>
+
+			<div id="historyContent"
+				 class="text-sm border rounded"
+				 style="flex: 1 1 auto; min-height: 0; overflow-y: auto;">
+			  Loading...
+			</div>
+
+			<div class="flex justify-between items-center mt-4"
+				 style="flex-shrink: 0;">
+
+			  <button class="text-sm text-red-500"
+					  onclick="closeModal('historyModal')">
+				Close
+			  </button>
+
+			  <button class="button-style text-white"
+					  style="background-color: #dc2626;"
+					  onclick="deletePredictionHistory()">
+				Delete History
+			  </button>
+			</div>
+
+		  </div>
+		</div>
+		
+    </body>
+	
+</html>

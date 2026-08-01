@@ -1,0 +1,17 @@
+# Do not version environments, build outputs, secrets, or large binaries
+venv/
+polymer/
+__pycache__/
+**/__pycache__/
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+node_modules/
+
+# Large model/binary formats
+*.pyc
+*.pt
+*.onnx
