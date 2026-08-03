@@ -143,7 +143,7 @@ function showContent(contentId, event) {
 		}
     }
 
-    // 🔁 Activează doar secțiunea potrivită
+    // Activate only the selected section
     const contentElement = document.getElementById(contentId);
 	if (contentElement) {
 	  contentElement.classList.add("active");
@@ -156,8 +156,8 @@ function showContent(contentId, event) {
 	  requestAnimationFrame(observeActiveContentCard);
 	}
 
-    // 🔁 Activează butonul apăsat; dacă funcția este apelată programatic,
-	// caută automat butonul corespunzător din sidebar
+    // Activate the clicked button; if the function is called programmatically,
+	// automatically find the matching sidebar button
 	if (event && event.currentTarget) {
 		event.currentTarget.classList.add("active");
 	} else {
@@ -169,12 +169,12 @@ function showContent(contentId, event) {
 		});
 	}
 
-    // 🔁 Dacă e subbuton, activează și butonul principal „Properties Generator”
+    // If this is a submenu button, also activate the main "Properties Generator" button
     if (["gradius", "sasa", "diffusion"].includes(contentId)) {
         document.getElementById("btn-polymer").classList.add("active");
     }
 	
-	// Auto-close drawer pe mobil după click pe un meniu
+	// Auto-close the drawer on mobile after clicking a menu item
     if (isTouchDrawerMode()) {
 		const sidebar = document.getElementById("sidebar");
 		if (sidebar?.classList.contains("open")) toggleMenu(false);
@@ -192,7 +192,7 @@ function toggleMenu(forceState) {
   const overlay = document.getElementById("mobileOverlay");
   if (!sidebar) return;
 
-  // doar lățimea decide mobil vs web (vezi isTouchDrawerMode)
+  // Only width decides mobile vs desktop mode (see isTouchDrawerMode)
   const isMobile = isTouchDrawerMode();
 
   const willOpen = (typeof forceState === "boolean")
@@ -201,7 +201,7 @@ function toggleMenu(forceState) {
 
   // helpers scroll-lock
   const lockScroll = () => {
-    // dacă un modal a blocat deja scroll-ul, nu suprascriem
+    // If a modal already locked scrolling, do not override it
     if (document.body.dataset.scrollLocked === "1") return;
   
     window.__savedScrollY = window.scrollY || document.documentElement.scrollTop || 0;
@@ -211,7 +211,7 @@ function toggleMenu(forceState) {
     s.left = "0"; s.right = "0"; s.width = "100%"; s.overflow = "hidden";
   };
   const unlockScroll = () => {
-    // dacă un modal este deschis și ține scroll-ul blocat, nu deblocăm aici
+    // If a modal is open and keeps scrolling locked, do not unlock it here
     if (document.body.dataset.scrollLocked === "1") return;
   
     const s = document.body.style;
@@ -230,7 +230,7 @@ function toggleMenu(forceState) {
       overlay && overlay.classList.remove("show");
       unlockScroll();
     }
-    // în modul mobil nu folosim „collapsed”
+    // In mobile mode, do not use "collapsed"
     sidebar.classList.remove("collapsed");
     return;
   }
@@ -243,30 +243,30 @@ function toggleMenu(forceState) {
 	sidebar.classList.toggle("collapsed");
 }
 
-// Tap pe overlay închide drawer-ul
+// Tapping the overlay closes the drawer
 document.getElementById("mobileOverlay")?.addEventListener("click", () => toggleMenu(false));
 
-// Tap/click în afara meniului închide drawer-ul (NUMAI pe mobil)
+// Tapping/clicking outside the menu closes the drawer on mobile only
 document.addEventListener("click", function (event) {
   const sidebar = document.getElementById("sidebar");
   if (!sidebar) return;
 
-  // doar în modul mobil (drawer)
+  // Only in mobile drawer mode
   if (!isTouchDrawerMode()) return;
 
-  // dacă meniul nu e deschis, nu facem nimic
+  // If the menu is not open, do nothing
   if (!sidebar.classList.contains("open")) return;
 
   const target = event.target;
 
-  // dacă am dat click în interiorul meniului, nu îl închidem
+  // If the click was inside the menu, do not close it
   if (sidebar.contains(target)) return;
 
-  // dacă am dat click pe butonul ☰, nu îl închidem aici
+  // If the click was on the menu toggle button, do not close it here
   const toggleBtn = document.getElementById("menuToggle");
   if (toggleBtn && toggleBtn.contains(target)) return;
 
-  // orice alt click în afara meniului => închidem meniul
+  // Any other click outside the menu closes it
   toggleMenu(false);
 });
 
@@ -278,11 +278,11 @@ function isMobileLandscape() {
 
 
 function isSmallMobilePortrait() {
-  // activ doar pe telefon (nu tabletă)
+  // Active only on phones, not tablets
   if (!document.documentElement.classList.contains('mobile-mode')) return false;
 
   const isPortrait = window.matchMedia("(orientation: portrait)").matches;
-  // prindem iPhone SE (320), 360 și alte telefoane scurte
+  // Cover iPhone SE (320), 360px devices, and other short phones
   const narrowW = window.matchMedia("(max-width: 380px)").matches;
   const shortH  = window.matchMedia("(max-height: 700px)").matches;
 
@@ -298,26 +298,26 @@ function toggleSubmenu(event) {
   const container  = document.getElementById("submenu-container");
   const polymerBtn = document.getElementById("btn-polymer");
   const arrow      = document.getElementById("arrow");   // poate lipsi
-  const sidebar    = document.getElementById("sidebar"); // drawer-ul care SCROLL-ează
+  const sidebar    = document.getElementById("sidebar"); // the scrolling drawer
   if (!container || !polymerBtn) return;
 
   const isOpening = !container.classList.contains("show");
 
-  // ===== iOS/touch FIX: fără height și pe landscape, și pe portret foarte mic =====
+  // ===== iOS/touch fix: no height animation on landscape or very small portrait screens =====
   if (isMobileLandscape() || isSmallMobilePortrait()) {
     if (isOpening) {
-      // pregătire: arătăm instant, dar lăsăm fade+slide să se aplice
+      // Preparation: show instantly, but allow fade and slide to apply
       container.classList.add("show", "submenu-anim");
-      container.style.height = "auto";            // fără height-transition în landscape
+      container.style.height = "auto";            // no height transition in landscape
       polymerBtn.classList.add("active");
       if (arrow) arrow.style.transform = "rotate(180deg)";
 
-      // pornește efectul într-un frame nou
+      // Start the effect in a new frame
       requestAnimationFrame(() => {
         container.classList.add("enter");
       });
 
-      // adu submeniul în viewport după ce devine vizibil
+      // Bring the submenu into the viewport after it becomes visible
       const doScroll = () => {
         if (!sidebar) return;
         const y = container.offsetTop - 12;
@@ -330,7 +330,7 @@ function toggleSubmenu(event) {
       requestAnimationFrame(() => requestAnimationFrame(doScroll));
 
     } else {
-      // închidere: scoatem .enter (devine invizibil), apoi curățăm starea
+      // Closing: remove .enter to hide it, then clean up state
       container.classList.remove("enter");
 
       const closeCleanup = () => {
@@ -348,21 +348,21 @@ function toggleSubmenu(event) {
         }
       };
 
-      // fallback în caz că Safari nu emite transitionend
+      // Fallback in case Safari does not emit transitionend
       const t = setTimeout(closeCleanup, 260);
       container.addEventListener("transitionend", (evt) => {
         clearTimeout(t);
         onEnd(evt);
       }, { once: true });
     }
-    return; // în landscape ne oprim aici; ramura standard rămâne pentru portret/desktop
+    return; // stop here in landscape; the standard branch remains for portrait/desktop
   }
 
-  // ===== PORTRET / DESKTOP: animația ta pe height rămâne neschimbată =====
+  // ===== Portrait / desktop: keep the height animation unchanged =====
   // scoate "active" de pe toate butoanele principale
   document.querySelectorAll(".menu-item").forEach(btn => btn.classList.remove("active"));
 
-  // helper: aduce submeniul complet în viewportul drawer-ului
+  // Helper: bring the full submenu into the drawer viewport
   const scrollSubmenuIntoDrawer = () => {
     if (!sidebar) return;
     const pr = sidebar.getBoundingClientRect();
@@ -377,12 +377,12 @@ function toggleSubmenu(event) {
   };
 
   if (isOpening) {
-    // anulăm orice display inline rămas de la o închidere anterioară
+    // Clear any inline display left from a previous close action
     container.style.removeProperty("display");
     container.classList.add("show");
 
     // 0 -> scrollHeight
-    const target = container.scrollHeight;   // măsoară o singură dată
+    const target = container.scrollHeight;   // measure only once
 	container.style.height = "0px";
 	requestAnimationFrame(() => {
 		requestAnimationFrame(() => {
@@ -390,7 +390,7 @@ function toggleSubmenu(event) {
 		});
 	});
 
-    // după tranziție: height:auto și abia apoi scroll
+    // After the transition: set height:auto, then scroll
     const onOpenEnd = (e) => {
       if (e.propertyName !== "height") return;
       container.style.height = "auto";
@@ -398,7 +398,7 @@ function toggleSubmenu(event) {
     };
     container.addEventListener("transitionend", onOpenEnd, { once: true });
 
-    // fallback în caz că transitionend nu se emite
+    // Fallback in case transitionend is not emitted
     setTimeout(() => {
       if (container.classList.contains("show")) {
         container.style.height = "auto";
@@ -417,10 +417,10 @@ function toggleSubmenu(event) {
     const closeCleanup = () => {
       container.classList.remove("show");
       container.style.height = "";
-      container.style.display = ""; // curățăm orice inline vechi
+      container.style.display = ""; // clear any old inline value
     };
 
-    // fallback dacă nu vine transitionend
+    // Fallback if transitionend does not fire
     const t = setTimeout(closeCleanup, 380);
 
     container.addEventListener("transitionend", (e) => {
@@ -445,10 +445,10 @@ function isPlotlyReady(el) {
 function xTickConfig(el) {
   const w = el?.clientWidth || 800;
 
-  // ~1 tick / 80px, între 4 și 14 ticks
+  // Approximately 1 tick per 80px, between 4 and 14 ticks
   const nticks = Math.max(4, Math.min(14, Math.round(w / 80)));
 
-  // Ajustare unghi & font în funcție de lățime
+  // Adjust angle and font based on width
   let angle = 0;
   let tickSize = 12;
   if (w < 520) { angle = -45; tickSize = 10; }
@@ -463,23 +463,23 @@ function xTickConfig(el) {
 }
 
 
-// Normalizează graficul imediat după generare, ca să fie identic cu starea după un resize
+// Normalize the graph immediately after generation so it matches the post-resize state
 function stabilizeAndNormalizeTicks(id) {
   const el = document.getElementById(id);
-  if (!isPlotlyReady(el)) return;  // evită relayout pe div neinițializat
+  if (!isPlotlyReady(el)) return;  // avoid relayout on an uninitialized div
 
-  // rulează pe frame-ul următor, când DOM-ul are lățimea finală
+  // Run on the next frame, when the DOM has its final width
   requestAnimationFrame(() => {
     const w = el.clientWidth || 800;
 
-    // Config dinamic de bază (nticks, unghi, font) + resize
+    // Basic dynamic config: nticks, angle, font and resize
     Plotly.Plots.resize(el);
 
-    // Pe ecrane late forțăm 100 (cum ți-ai dorit); altfel lăsăm auto + xTickConfig
+    // On wide screens, force 100; otherwise keep auto mode with xTickConfig
     const prefer50 = w >= 1100; // prag de la care graficul e „alungit”
 	const dynamicCfg = xTickConfig(el);
 	const extra = prefer50
-		? { 'xaxis.tickmode': 'linear', 'xaxis.dtick': 50 }  // <— 50 în loc de 100
+		? { 'xaxis.tickmode': 'linear', 'xaxis.dtick': 50 }  // 50 instead of 100
 		: { 'xaxis.tickmode': 'auto',   'xaxis.dtick': null };
 
 	Plotly.relayout(el, { ...dynamicCfg, ...extra });
@@ -487,18 +487,18 @@ function stabilizeAndNormalizeTicks(id) {
 }
 
 
-// === Limităm zoom-out la span-ul inițial al graficului 2D (variantă robustă) ===
+// === Limit zoom-out to the initial span of the 2D graph, robust version ===
 function attachZoomClampToInitialRange(graphDivId) {
   const div = document.getElementById(graphDivId);
   if (!div) return;
 
   // Plotly.newPlot poate reseta handler-ele interne.
-  // Curățăm listenerul vechi și îl reatașăm.
+  // Clear the old listener and attach it again.
   if (typeof div.removeAllListeners === "function") {
     div.removeAllListeners("plotly_relayout");
   }
 
-  // inițializăm span-ul inițial din layout
+  // Initialize the initial span from the layout
   function initSpans() {
     const layout = div.layout;
     if (!layout || !layout.xaxis || !layout.yaxis) return false;
@@ -512,7 +512,7 @@ function attachZoomClampToInitialRange(graphDivId) {
     return true;
   }
 
-  // dacă la momentul apelului layout-ul nu e încă complet, mai încercăm o dată pe frame-ul următor
+  // If the layout is not complete at call time, try again on the next frame
   if (!initSpans()) {
     requestAnimationFrame(() => requestAnimationFrame(initSpans));
   }
@@ -677,13 +677,13 @@ function updatePolymerStructure(kind){
 // ........... //
 
 
-// ===== NEW: actualizează lista de polimeri în funcție de tipul selectat =====
+// ===== NEW: update the polymer list based on the selected type =====
 function updatePolymerOptions(kind) {
   hidePolymerStructure(kind);
   const category = document.getElementById("polymer_category_" + kind).value;
 
   const familySelect  = document.getElementById("polymer_family_" + kind);
-  const nameSelect    = document.getElementById("polymer_type_" + kind); // rămâne FINAL (backend)
+  const nameSelect    = document.getElementById("polymer_type_" + kind); // remains FINAL for the backend
 
   // reset
   familySelect.innerHTML = "";
@@ -692,7 +692,7 @@ function updatePolymerOptions(kind) {
   nameSelect.innerHTML = "";
   nameSelect.disabled = true;
 
-  // dacă nu e selectat Class -> totul rămâne blocat
+  // If no class is selected, keep everything locked
   if (!category) {
     if (kind === "gradius") validateInputGradius();
     else validateInputSasa();
@@ -707,7 +707,7 @@ function updatePolymerOptions(kind) {
     familyList = ["Acrylamides","Amines","Amides","Imines","Ketones","Olefins","Oxides","Vinyls"];
   }
 
-  // adăugăm prima opțiune placeholder
+  // Add the first placeholder option
   const defaultFamilyOption = document.createElement("option");
   defaultFamilyOption.value = "";
   defaultFamilyOption.textContent = "Select...";
@@ -725,7 +725,7 @@ function updatePolymerOptions(kind) {
 
   familySelect.disabled = false;
 
-  // Polymer Name rămâne complet gol până alegi efectiv Polymer Type
+  // Polymer Name remains empty until a Polymer Type is selected
   nameSelect.innerHTML = "";
   nameSelect.disabled = true;
 
@@ -742,7 +742,7 @@ function updatePolymerNameOptions(kind) {
   nameSelect.innerHTML = "";
   nameSelect.disabled = true;
 
-  // dacă nu e selectată familia, Polymer Name rămâne gol
+  // If no family is selected, keep Polymer Name empty
   if (!category || !family) {
     hidePolymerStructure(kind);
 
@@ -751,7 +751,7 @@ function updatePolymerNameOptions(kind) {
     return;
   }
 
-  // doar după selectarea Polymer Type afișăm placeholder-ul Select...
+  // Show the Select... placeholder only after Polymer Type is selected
   const defaultNameOption = document.createElement("option");
   defaultNameOption.value = "";
   defaultNameOption.textContent = "Select...";
@@ -768,10 +768,10 @@ function updatePolymerNameOptions(kind) {
     "Ketones":     ["PVMKR"],
     "Olefins":     ["PE"],
     "Oxides":      ["PEO"],
-    "Vinyls":      ["PE"]   // da, tot PE în fișierul tău
+    "Vinyls":      ["PE"]   // PE is the intended entry here
   };
 
-  // Natural: trimitem direct GUAI / PHP / SYR către backend
+  // Natural: send GUAI / PHP / SYR directly to the backend
   let list = [];
   if (category === "Natural") {
       list = ["GUAI", "PHP", "SYR"];
@@ -805,18 +805,18 @@ function validateInputGradius() {
   const value = inputField.value.trim();
   const regex = /^[1-9]\d*$/;
 
-  // 1.Dacă nu e nimic scris → ascundem mesajul, dezactivăm butonul
+  // 1. If nothing is entered, hide the message and disable the button
   if (value === "") {
     errorMessage.classList.add("hidden");
     generateButton.disabled = true;
     return;
   }
 
-  // 2️.Dacă inputul e valid numeric
+  // 2. If the input is numerically valid
   if (regex.test(value)) {
     const numericValue = parseInt(value, 10);
 
-    // 2.a) Dacă >1000 → afișăm mesajul roșu
+    // 2.a) If >1000, show the red message
     if (numericValue > 1000) {
       errorMessage.classList.remove("hidden");
       errorMessage.textContent = "*Please enter a single positive integer less than or equal to 1000.";
@@ -824,7 +824,7 @@ function validateInputGradius() {
       return;
     }
 
-    // 2.b) Număr OK, dar verificăm dacă polimerul este selectat
+    // 2.b) Number is OK, but check whether a polymer is selected
     errorMessage.classList.add("hidden");
 
     if (polymer !== "") {
@@ -836,7 +836,7 @@ function validateInputGradius() {
     return;
   }
 
-  // 3.Dacă nu e număr valid → afișăm mesaj roșu
+  // 3. If the value is not a valid number, show the red message
   errorMessage.classList.remove("hidden");
   errorMessage.textContent = "*Please enter a single positive integer less than or equal to 1000.";
   generateButton.disabled = true;
