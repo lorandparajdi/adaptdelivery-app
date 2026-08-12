@@ -41,6 +41,15 @@ pdb_generators/
 The application code keeps the same general structure as the production platform, but predictions are expected to work only for the polymers whose model, data and generator files are included in this repository.
 This public version includes complete working assets for GUAI and PEI only. Additional polymer folders can be added following the same `data/`, `models/` and `pdb_generators/` structure.
 
+## ANN Input and Representative Models
+
+The input variable used by each property-specific artificial neural network (ANN) is the polymer monomer number, denoted by `x`, within the supported range of 1–1000 monomers. 
+For each supported polymer, separate property-specific ANN models are used to predict the radius of gyration (Rg) and solvent-accessible surface area (SASA).
+
+The public repository includes representative input data and trained `.pth` models for GUAI and PEI. 
+The datasets consist of `(monomer number, polymer property)` pairs generated from power-law fits to structural descriptor values obtained from molecular dynamics simulations. 
+The same input structure and model-integration workflow are used for the other supported polymers.
+
 ## Setup
 
 Create a virtual environment and install dependencies:
