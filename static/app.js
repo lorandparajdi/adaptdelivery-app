@@ -1083,7 +1083,8 @@ function pdbNormalizeCamera(viewer, projKind) {
   }
 
   // 2) Construim view final: păstrăm centrul, forțăm camera din default
-  const v = { ...centered };
+  //const v = { ...centered };
+  const v = centered.slice();
 
   const KEEP_CENTER_KEYS = [
     "trans", "translation", "center", "origin", "target", "lookat", "focus",
