@@ -81,6 +81,7 @@ main > .content {
 :root.mobile-mode body {
   height: auto;
   min-height: 100vh;
+  min-height: 100dvh;
   overflow-x: hidden;
   overflow-y: visible;
 }

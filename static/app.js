@@ -32,9 +32,9 @@ function classifyDevice() {
 
 function applyDeviceMode() {
   const kind = classifyDevice();
-  const isPhone = (kind === "phone");
+   const useMobileLayout = kind === "phone" || kind === "tablet";
 
-  document.documentElement.classList.toggle("mobile-mode", isPhone);
+   document.documentElement.classList.toggle("mobile-mode", useMobileLayout);
 }
 
 // Run immediately
