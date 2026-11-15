@@ -2,7 +2,7 @@
 
 AdaptDelivery is a Flask-based web application for polymer property prediction and interactive polymer structure generation.
 
-This public repository contains a limited demo version of the platform. It preserves the main application structure while including only selected demo assets for:
+This public repository provides an open-source demonstration version of the platform. It preserves the main application structure while including representative trained models, datasets and PDB generators for:
 
 - GUAI, a natural polymer unit
 - PEI, a synthetic polymer
@@ -40,6 +40,18 @@ pdb_generators/
 
 The application code keeps the same general structure as the production platform, but predictions are expected to work only for the polymers whose model, data and generator files are included in this repository.
 This public version includes complete working assets for GUAI and PEI only. Additional polymer folders can be added following the same `data/`, `models/` and `pdb_generators/` structure.
+
+## Reproducibility and Service Restoration
+
+The public repository includes the application source code, representative trained machine learning models, datasets and PDB generators for GUAI and PEI. These resources are intended to support independent deployment of a functional demonstration version of AdaptDelivery, including polymer property prediction and molecular visualization.
+
+The remaining trained models used by the hosted platform are maintained by the authors and are available upon reasonable request and subject to authorization, including for the purpose of restoring the complete web service if the original hosting infrastructure becomes unavailable.
+
+The public repository supports restoration of the demonstration version, while reproducing the complete set of supported polymer predictions requires access to the additional models.
+
+For requests concerning additional models or service restoration, please contact:
+
+contact@adaptdelivery.org
 
 ## ANN Input and Representative Models
 
@@ -147,7 +159,11 @@ Do not commit:
 
 ## License
 
-This repository is made available under a restricted academic review license. See `LICENSE` for details.
+The AdaptDelivery application source code, including the Flask backend, frontend components and publicly available Python PDB generators, is licensed under the Mozilla Public License 2.0 (MPL 2.0). See the `LICENSE` file for the full license terms.
+
+The publicly available representative trained machine learning models and datasets for GUAI and PEI are licensed under the Creative Commons Attribution 4.0 International License (CC BY 4.0). See `LICENSE_ASSETS.md` for details.
+
+These licenses apply only to the resources included in the public repository. The remaining production models, datasets and generators are not publicly distributed and remain subject to separate authorization by the rights holders.
 
 ## Contact
 
