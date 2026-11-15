@@ -47,7 +47,7 @@ The public repository includes the application source code, representative train
 
 The remaining trained models used by the hosted platform are maintained by the authors and are available upon reasonable request and subject to authorization, including for the purpose of restoring the complete web service if the original hosting infrastructure becomes unavailable.
 
-The public repository supports restoration of the demonstration version, while reproducing the complete set of supported polymer predictions requires access to the additional models.
+The public repository supports deployment for GUAI and PEI. Restoring the full platform requires the remaining trained models, datasets and PDB generators, together with the necessary configuration.
 
 For requests concerning additional models or service restoration, please contact:
 
@@ -106,7 +106,7 @@ APP_PORT=5000
 APP_DEBUG=true
 
 MAIL_SERVER=
-MAIL_PORT=
+MAIL_PORT=587
 MAIL_USERNAME=
 MAIL_PASSWORD=
 
@@ -120,8 +120,9 @@ Optional backup email delivery can be configured with:
 ```env
 MAIL_BACKUP_ENABLED=false
 MAIL_BACKUP_DELAY_SECONDS=240
+PUBLIC_BASE_URL=http://localhost:5000
 BACKUP_MAIL_SERVER=
-BACKUP_MAIL_PORT=
+BACKUP_MAIL_PORT=587
 BACKUP_MAIL_USERNAME=
 BACKUP_MAIL_PASSWORD=
 ```
