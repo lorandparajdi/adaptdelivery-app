@@ -127,15 +127,53 @@ BACKUP_MAIL_PASSWORD=
 ```
 **Important:** The settings `ENV=dev`, `APP_DEBUG=true` and `RECAPTCHA_BYPASS=1` are intended for local development only. Production deployments must use `ENV=prod`, `APP_DEBUG=false` and `RECAPTCHA_BYPASS=0`, together with valid reCAPTCHA credentials.
 
+
 ## Database
 
-AdaptDelivery uses PostgreSQL through SQLAlchemy.
+AdaptDelivery uses PostgreSQL through Flask-SQLAlchemy.
 
-Main tables:
+Before running the application for the first time, create an empty PostgreSQL database and configure the `DATABASE_URL` variable in the local `.env` file with valid connection credentials.
+
+For example:
+
+```env
+DATABASE_URL=postgresql://username:password@localhost:5432/polymer_users
+```
+
+Replace `username` and `password` with your own PostgreSQL credentials. The configured database user must have permission to create tables.
+
+### Database Initialization
+
+The application does not automatically create database tables on startup.
+
+For a new installation, activate the Python virtual environment, ensure that the PostgreSQL database exists and that `.env` is correctly configured, then run the following command from the repository root:
+
+```bash
+python -m flask --app app shell
+```
+
+Inside the Flask shell, execute:
+
+```python
+from auth import db
+db.create_all()
+```
+
+Exit the shell using:
+
+```python
+exit()
+```
+
+This initializes the database tables defined by the application's SQLAlchemy models:
 
 - `user`
 - `guest_users`
 - `prediction_history`
+
+Database initialization is required only for a new installation. The `db.create_all()` command creates missing tables but does not update existing table schemas.
+
+Do not use this initialization procedure to modify an existing production database. Existing databases should be managed using appropriate database migration procedures.
 
 ## Run
 
