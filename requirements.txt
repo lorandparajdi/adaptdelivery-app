@@ -1,9 +1,6 @@
 # Use the default PyPI index.
 # No need to re-declare --index-url unless customized elsewhere.
 
-# allow pulling PyTorch CPU/CUDA builds from the nightly CUDA-11.8 channel
---extra-index-url https://download.pytorch.org/whl/nightly/cu118
-
 Flask
 Flask-Mail
 Flask-SQLAlchemy
@@ -17,7 +14,5 @@ python-dotenv
 requests
 plotly
 
-# nightly CUDA-11.8 builds for Python 3.12
-torch --pre
-torchvision --pre
-torchaudio --pre
+# Stable PyTorch version used by AdaptDelivery
+torch==2.13.0
