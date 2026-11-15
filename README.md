@@ -15,11 +15,12 @@ The full production model collection, dataset collection and generator library a
 - Radius of gyration prediction
 - Solvent-accessible surface area prediction
 - PDB structure generation for included demo polymers
+- Guest access without mandatory registration
 - User signup and login
 - Email confirmation
 - Password reset
 - Optional backup email delivery
-- Optional Google reCAPTCHA protection
+- Google reCAPTCHA protection with a development-only bypass
 - Prediction history for registered users
 
 ## Repository Contents
@@ -63,6 +64,8 @@ The datasets consist of `(monomer number, polymer property)` pairs generated fro
 The same input structure and model-integration workflow are used for the other supported polymers.
 
 ## Setup
+
+Tested with Python 3.12.3.
 
 Create a virtual environment and install dependencies:
 
@@ -129,7 +132,7 @@ BACKUP_MAIL_PASSWORD=
 **Important:** The settings `ENV=dev`, `APP_DEBUG=true` and `RECAPTCHA_BYPASS=1` are intended for local development only. Production deployments must use `ENV=prod`, `APP_DEBUG=false` and `RECAPTCHA_BYPASS=0`, together with valid reCAPTCHA credentials.
 
 
-## Database
+## Database adaptdelivery_demo
 
 AdaptDelivery uses PostgreSQL through Flask-SQLAlchemy.
 
@@ -182,7 +185,7 @@ Do not use this initialization procedure to modify an existing production databa
 python app.py
 ```
 
-The app will start using `APP_HOST` and `APP_PORT` from `.env`.
+The app will start using `APP_HOST` and `APP_PORT` from `.env`. For local testing, use `APP_HOST=127.0.0.1` and `APP_PORT=5055`. The Flask development server is intended for testing only and should not be used for production deployment.
 
 ## Security
 
