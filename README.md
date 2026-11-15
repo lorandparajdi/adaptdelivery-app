@@ -125,6 +125,7 @@ BACKUP_MAIL_PORT=
 BACKUP_MAIL_USERNAME=
 BACKUP_MAIL_PASSWORD=
 ```
+**Important:** The settings `ENV=dev`, `APP_DEBUG=true` and `RECAPTCHA_BYPASS=1` are intended for local development only. Production deployments must use `ENV=prod`, `APP_DEBUG=false` and `RECAPTCHA_BYPASS=0`, together with valid reCAPTCHA credentials.
 
 ## Database
 
